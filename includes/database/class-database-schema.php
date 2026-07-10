@@ -1,7 +1,5 @@
 <?php
 /**
- * CASBEN Business Suite
- *
  * Database Schema Manager
  *
  * @package CASBEN_Business_Suite
@@ -14,102 +12,49 @@ if ( ! defined( 'ABSPATH' ) ) {
 class CASBEN_Database_Schema {
 
 	/**
-	 * Create or update plugin database tables.
+	 * Database Version.
+	 */
+	const DB_VERSION = '1.0.0';
+
+	/**
+	 * Create or update all plugin tables.
 	 *
 	 * @return void
 	 */
 	public static function create_tables() {
 
-		global $wpdb;
+		// Load schema classes.
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'database/class-schema-customers.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'database/class-schema-products.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'database/class-schema-invoices.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'database/class-schema-invoice-items.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'database/class-schema-settings.php';
 
-		$charset_collate = $wpdb->get_charset_collate();
+		// Create tables.
+		CASBEN_Schema_Customers::create_table();
 
-		/**
-		 * Customers Table
-		 */
-		$customers_table = $wpdb->prefix . 'casben_customers';
+		// These will be enabled as we complete each schema.
+		// CASBEN_Schema_Products::create_table();
+		// CASBEN_Schema_Invoices::create_table();
+		// CASBEN_Schema_Invoice_Items::create_table();
+		// CASBEN_Schema_Settings::create_table();
 
-		$sql_customers = "CREATE TABLE {$customers_table} (
-			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-			customer_name varchar(255) NOT NULL,
-			company_name varchar(255) DEFAULT '',
-			ntn varchar(100) DEFAULT '',
-			strn varchar(100) DEFAULT '',
-			phone varchar(50) DEFAULT '',
-			email varchar(100) DEFAULT '',
-			address text,
-			is_active tinyint(1) NOT NULL DEFAULT 1,
-			created_at datetime DEFAULT CURRENT_TIMESTAMP,
-			PRIMARY KEY (id),
-			KEY customer_name (customer_name)
-		) {$charset_collate};";
-
-		/**
-		 * Products Table
-		 */
-		$products_table = $wpdb->prefix . 'casben_products';
-
-		$sql_products = "CREATE TABLE {$products_table} (
-			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-			product_name varchar(255) NOT NULL,
-			sku varchar(100) DEFAULT '',
-			unit_price decimal(10,2) DEFAULT 0.00,
-			tax_rate decimal(5,2) DEFAULT 18.00,
-			is_active tinyint(1) NOT NULL DEFAULT 1,
-			created_at datetime DEFAULT CURRENT_TIMESTAMP,
-			PRIMARY KEY (id),
-			KEY sku (sku)
-		) {$charset_collate};";
-
-		/**
-		 * Invoices Table
-		 */
-		$invoices_table = $wpdb->prefix . 'casben_invoices';
-
-		$sql_invoices = "CREATE TABLE {$invoices_table} (
-			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-			invoice_number varchar(100) NOT NULL,
-			customer_id bigint(20) unsigned NOT NULL,
-			invoice_date date NOT NULL,
-			subtotal decimal(10,2) DEFAULT 0.00,
-			tax_amount decimal(10,2) DEFAULT 0.00,
-			total_amount decimal(10,2) DEFAULT 0.00,
-			status varchar(50) DEFAULT 'draft',
-			fbr_status varchar(50) DEFAULT 'pending',
-			fbr_response longtext,
-			created_at datetime DEFAULT CURRENT_TIMESTAMP,
-			PRIMARY KEY (id),
-			KEY invoice_number (invoice_number),
-			KEY customer_id (customer_id),
-			KEY invoice_date (invoice_date),
-			KEY status (status)
-		) {$charset_collate};";
-
-		/**
-		 * Invoice Items Table
-		 */
-		$invoice_items_table = $wpdb->prefix . 'casben_invoice_items';
-
-		$sql_invoice_items = "CREATE TABLE {$invoice_items_table} (
-			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-			invoice_id bigint(20) unsigned NOT NULL,
-			product_id bigint(20) unsigned NOT NULL,
-			description text,
-			quantity decimal(10,2) DEFAULT 1.00,
-			price decimal(10,2) DEFAULT 0.00,
-			tax decimal(10,2) DEFAULT 0.00,
-			total decimal(10,2) DEFAULT 0.00,
-			PRIMARY KEY (id),
-			KEY invoice_id (invoice_id),
-			KEY product_id (product_id)
-		) {$charset_collate};";
-
-		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-
-		dbDelta( $sql_customers );
-		dbDelta( $sql_products );
-		dbDelta( $sql_invoices );
-		dbDelta( $sql_invoice_items );
+		update_option(
+			'casben_db_version',
+			self::DB_VERSION
+		);
 	}
 
+	/**
+	 * Get current database version.
+	 *
+	 * @return string
+	 */
+	public static function get_version() {
+
+		return get_option(
+			'casben_db_version',
+			'0.0.0'
+		);
+	}
 }
