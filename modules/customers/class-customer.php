@@ -16,9 +16,7 @@ class CASBEN_Customers {
 	 */
 	public function __construct() {
 
-		require_once CASBEN_PLUGIN_DIR . 'modules/customers/class-customers-admin.php';
-
-		new CASBEN_Customers_Admin();
+		// Customer module initialization will be added here later.
 
 	}
 

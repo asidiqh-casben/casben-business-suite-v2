@@ -30,15 +30,23 @@ class CASBEN_Admin_Menu {
 			25
 		);
 
+		/*
+		 * Customers
+		 */
+		$customers_admin = new CASBEN_Customers_Admin();
+
 		add_submenu_page(
 			'casben-business-suite',
 			__( 'Customers', 'casben-business-suite' ),
 			__( 'Customers', 'casben-business-suite' ),
 			'manage_options',
 			'casben-customers',
-			array( __CLASS__, 'customers_page' )
+			array( $customers_admin, 'customers_page' )
 		);
 
+		/*
+		 * Invoices
+		 */
 		add_submenu_page(
 			'casben-business-suite',
 			__( 'Invoices', 'casben-business-suite' ),
@@ -48,6 +56,9 @@ class CASBEN_Admin_Menu {
 			array( __CLASS__, 'invoices_page' )
 		);
 
+		/*
+		 * Settings
+		 */
 		add_submenu_page(
 			'casben-business-suite',
 			__( 'Settings', 'casben-business-suite' ),
@@ -69,20 +80,6 @@ class CASBEN_Admin_Menu {
 		<div class="wrap">
 			<h1><?php esc_html_e( 'CASBEN Business Suite', 'casben-business-suite' ); ?></h1>
 			<p><?php esc_html_e( 'Welcome to CASBEN Business Management System.', 'casben-business-suite' ); ?></p>
-		</div>
-		<?php
-	}
-
-	/**
-	 * Customers page.
-	 *
-	 * @return void
-	 */
-	public static function customers_page() {
-		?>
-		<div class="wrap">
-			<h1><?php esc_html_e( 'Customers', 'casben-business-suite' ); ?></h1>
-			<p><?php esc_html_e( 'Customer management module will be added here.', 'casben-business-suite' ); ?></p>
 		</div>
 		<?php
 	}
