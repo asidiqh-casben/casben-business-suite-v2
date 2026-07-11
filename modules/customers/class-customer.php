@@ -16,8 +16,12 @@ class CASBEN_Customers {
 	 */
 	public function __construct() {
 
-		// Customer module initialization will be added here later.
+		// Load Customer classes.
+		require_once plugin_dir_path( __FILE__ ) . 'class-customer-list.php';
+		require_once plugin_dir_path( __FILE__ ) . 'class-customer-form.php';
+		require_once plugin_dir_path( __FILE__ ) . 'class-customer-admin.php';
 
+		// Initialize Customer Admin.
+		new CASBEN_Customers_Admin();
 	}
-
 }

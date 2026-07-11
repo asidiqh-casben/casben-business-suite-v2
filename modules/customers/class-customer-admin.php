@@ -47,11 +47,23 @@ class CASBEN_Customers_Admin {
 
 			if ( 'add' === $action ) {
 
-				echo '<h2>Add Customer Form (Coming Next Umar)</h2>';
+				$form = new CASBEN_Customer_Form();
+				$form->display();
 
 			} else {
 
-				echo '<p>Customer List (Coming Next Abdul)</p>';
+				$list_table = new CASBEN_Customer_List();
+				$list_table->prepare_items();
+
+				?>
+
+				<form method="post">
+
+					<?php $list_table->display(); ?>
+
+				</form>
+
+				<?php
 
 			}
 
