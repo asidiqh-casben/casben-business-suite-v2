@@ -23,7 +23,6 @@ class CASBEN_Customer_List extends WP_List_Table {
 	 * Constructor.
 	 */
 	public function __construct() {
-
 		parent::__construct(
 			array(
 				'singular' => 'customer',
@@ -34,24 +33,20 @@ class CASBEN_Customer_List extends WP_List_Table {
 	}
 
 	/**
-	 * Table Columns.
+	 * Table columns.
 	 *
 	 * @return array
 	 */
 	public function get_columns() {
-
 		return array(
-			'cb'              => '<input type="checkbox" />',
-			'id'              => __( 'ID', 'casben-business-suite' ),
-			'customer_code'   => __( 'Customer Code', 'casben-business-suite' ),
-			'company_name'    => __( 'Company', 'casben-business-suite' ),
-			'contact_person'  => __( 'Contact Person', 'casben-business-suite' ),
-			'mobile'          => __( 'Mobile', 'casben-business-suite' ),
-			'email'           => __( 'Email', 'casben-business-suite' ),
-			'ntn'             => __( 'NTN', 'casben-business-suite' ),
-			'strn'            => __( 'STRN', 'casben-business-suite' ),
-			'status'          => __( 'Status', 'casben-business-suite' ),
-			'created_at'      => __( 'Created', 'casben-business-suite' ),
+			'cb'             => '<input type="checkbox" />',
+			'customer_code'  => __( 'Customer Code', 'casben-business-suite' ),
+			'company_name'   => __( 'Company', 'casben-business-suite' ),
+			'contact_person' => __( 'Contact Person', 'casben-business-suite' ),
+			'mobile'         => __( 'Mobile', 'casben-business-suite' ),
+			'email'          => __( 'Email', 'casben-business-suite' ),
+			'ntn'            => __( 'NTN', 'casben-business-suite' ),
+			'created_at'     => __( 'Created', 'casben-business-suite' ),
 		);
 	}
 
@@ -62,10 +57,48 @@ class CASBEN_Customer_List extends WP_List_Table {
 	 * @return string
 	 */
 	protected function column_cb( $item ) {
-
 		return sprintf(
 			'<input type="checkbox" name="customer[]" value="%d" />',
-			$item['id']
+			absint( $item['id'] )
+		);
+	}
+
+	/**
+	 * Company name column.
+	 *
+	 * @param array $item Customer row.
+	 * @return string
+	 */
+	protected function column_company_name( $item ) {
+		$edit_url = admin_url(
+			'admin.php?page=casben-customers&action=edit&customer=' . absint( $item['id'] )
+		);
+
+		$delete_url = wp_nonce_url(
+			admin_url(
+				'admin.php?page=casben-customers&action=delete&customer=' . absint( $item['id'] )
+			),
+			'delete_customer_' . absint( $item['id'] )
+		);
+
+		$actions = array(
+			'edit' => sprintf(
+				'<a href="%s">%s</a>',
+				esc_url( $edit_url ),
+				__( 'Edit', 'casben-business-suite' )
+			),
+			'delete' => sprintf(
+				'<a href="%s" onclick="return confirm(\'%s\');">%s</a>',
+				esc_url( $delete_url ),
+				esc_js( __( 'Are you sure you want to delete this customer?', 'casben-business-suite' ) ),
+				__( 'Delete', 'casben-business-suite' )
+			),
+		);
+
+		return sprintf(
+			'<strong>%s</strong>%s',
+			esc_html( $item['company_name'] ?? '' ),
+			$this->row_actions( $actions )
 		);
 	}
 
@@ -77,31 +110,85 @@ class CASBEN_Customer_List extends WP_List_Table {
 	 * @return string
 	 */
 	protected function column_default( $item, $column_name ) {
-
 		if ( 'status' === $column_name ) {
-			return (int) $item['status'] === 1
+			return (int) ( $item['status'] ?? 0 ) === 1
 				? __( 'Active', 'casben-business-suite' )
 				: __( 'Inactive', 'casben-business-suite' );
 		}
 
-		return isset( $item[ $column_name ] )
-			? esc_html( $item[ $column_name ] )
-			: '';
+		return isset( $item[ $column_name ] ) ? esc_html( $item[ $column_name ] ) : '';
 	}
 
 	/**
-	 * Get customers from database.
+	 * Render search box.
 	 *
+	 * @param string $which Position of the nav.
+	 */
+	public function extra_tablenav( $which ) {
+		if ( 'top' === $which ) {
+			$this->search_box( __( 'Search Customers', 'casben-business-suite' ), 'customer' );
+		}
+	}
+
+	/**
+	 * Get search term from request.
+	 *
+	 * @return string
+	 */
+	private function get_search_term() {
+		$search = isset( $_REQUEST['s'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['s'] ) ) : '';
+
+		return $search;
+	}
+
+	/**
+	 * Get current page size.
+	 *
+	 * @return int
+	 */
+private function get_per_page() {
+	return max(
+		1,
+		(int) $this->get_items_per_page( 'customers_per_page', 10 )
+	);
+}
+	/**
+	 * Get total customers count.
+	 *
+	 * @param string $search Search term.
+	 * @return int
+	 */
+	public function get_total_customers( $search = '' ) {
+		global $wpdb;
+
+		$table = $wpdb->prefix . 'casben_customers';
+		$query = "SELECT COUNT(*) FROM {$table}";
+
+		if ( '' !== $search ) {
+			$like = '%' . $wpdb->esc_like( $search ) . '%';
+			$query .= ' WHERE customer_code LIKE %s OR company_name LIKE %s OR contact_person LIKE %s';
+			$query = $wpdb->prepare( $query, $like, $like, $like );
+		}
+
+		$count = $wpdb->get_var( $query );
+
+		return is_numeric( $count ) ? (int) $count : 0;
+	}
+
+	/**
+	 * Get customers from database with optional search and pagination.
+	 *
+	 * @param string $search Search term.
+	 * @param int    $per_page Number of records per page.
+	 * @param int    $page Current page.
 	 * @return array
 	 */
-	private function get_customers() {
-
+	public function get_customers( $search = '', $per_page = 2, $page = 1 ) {
 		global $wpdb;
 
 		$table = $wpdb->prefix . 'casben_customers';
 
-		$results = $wpdb->get_results(
-			"SELECT
+		$query = "SELECT
 				id,
 				customer_code,
 				company_name,
@@ -112,10 +199,25 @@ class CASBEN_Customer_List extends WP_List_Table {
 				strn,
 				status,
 				created_at
-			FROM {$table}
-			ORDER BY id DESC",
-			ARRAY_A
-		);
+			FROM {$table}";
+
+		$args = array();
+
+		if ( '' !== $search ) {
+			$like = '%' . $wpdb->esc_like( $search ) . '%';
+			$query .= ' WHERE customer_code LIKE %s OR company_name LIKE %s OR contact_person LIKE %s';
+			$args[] = $like;
+			$args[] = $like;
+			$args[] = $like;
+		}
+
+		$query .= ' ORDER BY id DESC LIMIT %d OFFSET %d';
+		$args[] = max( 1, (int) $per_page );
+		$args[] = max( 0, (int) ( ( max( 1, (int) $page ) - 1 ) * max( 1, (int) $per_page ) ) );
+
+		$query = $wpdb->prepare( $query, ...$args );
+
+		$results = $wpdb->get_results( $query, ARRAY_A );
 
 		return is_array( $results ) ? $results : array();
 	}
@@ -124,7 +226,6 @@ class CASBEN_Customer_List extends WP_List_Table {
 	 * Prepare table items.
 	 */
 	public function prepare_items() {
-
 		$columns  = $this->get_columns();
 		$hidden   = array();
 		$sortable = array();
@@ -135,13 +236,18 @@ class CASBEN_Customer_List extends WP_List_Table {
 			$sortable,
 		);
 
-		$this->items = $this->get_customers();
+		$per_page = $this->get_per_page();
+		$page     = max( 1, (int) $this->get_pagenum() );
+		$search   = $this->get_search_term();
+
+		$this->items = $this->get_customers( $search, $per_page, $page );
+		$total_items = $this->get_total_customers( $search );
 
 		$this->set_pagination_args(
 			array(
-				'total_items' => count( $this->items ),
-				'per_page'    => 20,
-				'total_pages' => 1,
+				'total_items' => $total_items,
+				'per_page'    => $per_page,
+				'total_pages' => max( 1, (int) ceil( $total_items / $per_page ) ),
 			)
 		);
 	}

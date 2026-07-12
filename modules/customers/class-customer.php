@@ -20,8 +20,10 @@ class CASBEN_Customers {
 		require_once plugin_dir_path( __FILE__ ) . 'class-customer-list.php';
 		require_once plugin_dir_path( __FILE__ ) . 'class-customer-form.php';
 		require_once plugin_dir_path( __FILE__ ) . 'class-customer-admin.php';
+		require_once plugin_dir_path( __FILE__ ) . 'class-customer-save.php';
 
-		// Initialize Customer Admin.
-		new CASBEN_Customers_Admin();
+		// Initialize modules.
+		
+		new CASBEN_Customer_Save();
 	}
 }

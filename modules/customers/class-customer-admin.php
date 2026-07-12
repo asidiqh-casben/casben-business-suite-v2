@@ -23,7 +23,7 @@ class CASBEN_Customers_Admin {
 	 */
 	public function customers_page() {
 
-		$action = isset( $_GET['action'] ) ? sanitize_key( $_GET['action'] ) : '';
+		$action = isset( $_GET['action'] ) ? sanitize_key( wp_unslash( $_GET['action'] ) ) : '';
 
 		?>
 
@@ -44,28 +44,49 @@ class CASBEN_Customers_Admin {
 			<hr class="wp-header-end">
 
 			<?php
+$message = isset( $_GET['message'] ) ? sanitize_key( wp_unslash( $_GET['message'] ) ) : '';
 
-			if ( 'add' === $action ) {
+if ( 'saved' === $message ) :
+?>
 
-				$form = new CASBEN_Customer_Form();
-				$form->display();
+<div class="notice notice-success is-dismissible">
+	<p><?php esc_html_e( 'Customer added successfully.', 'casben-business-suite' ); ?></p>
+</div>
 
-			} else {
+<?php elseif ( 'updated' === $message ) : ?>
 
-				$list_table = new CASBEN_Customer_List();
-				$list_table->prepare_items();
+<div class="notice notice-success is-dismissible">
+	<p><?php esc_html_e( 'Customer updated successfully.', 'casben-business-suite' ); ?></p>
+</div>
 
-				?>
+<?php elseif ( 'deleted' === $message ) : ?>
 
-				<form method="post">
+<div class="notice notice-success is-dismissible">
+	<p><?php esc_html_e( 'Customer deleted successfully.', 'casben-business-suite' ); ?></p>
+</div>
 
-					<?php $list_table->display(); ?>
+<?php endif; ?>
+			<?php
 
-				</form>
+			if ( 'add' === $action || 'edit' === $action ) {
 
-				<?php
+	$form = new CASBEN_Customer_Form();
+	$form->display();
 
-			}
+} else {
+
+	$list_table = new CASBEN_Customer_List();
+	$list_table->prepare_items();
+	?>
+
+	<form method="post">
+
+		<?php $list_table->display(); ?>
+
+	</form>
+
+	<?php
+}
 
 			?>
 
