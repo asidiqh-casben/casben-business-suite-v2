@@ -21,8 +21,8 @@ class CASBEN_Product_Form {
 		$is_edit = false;
 		$product = array();
 
-		$product_id = isset( $_GET['product'] )
-			? absint( wp_unslash( $_GET['product'] ) )
+		$product_id = isset( $_GET['id'] )
+			? absint( wp_unslash( $_GET['id'] ) )
 			: 0;
 
 		if ( $product_id > 0 ) {
@@ -220,10 +220,10 @@ class CASBEN_Product_Form {
 								type="number"
 								step="0.01"
 								min="0"
-								id="sales_tax"
-								name="sales_tax"
+								id="tax_rate"
+								name="tax_rate"
 								class="regular-text"
-								value="<?php echo esc_attr( $product['sales_tax'] ?? '18.00' ); ?>"
+								value="<?php echo esc_attr( $product['tax_rate'] ?? '18.00' ); ?>"
 							>
 						</td>
 					</tr>
@@ -261,9 +261,13 @@ class CASBEN_Product_Form {
 					?>
 					</button>
 
+					<?php if ( ! $is_edit ) : ?>
+
 					<button type="submit" name="casben_action" value="save_new" class="button">
-						<?php esc_html_e( 'Save & New', 'casben-business-suite' ); ?>
+					<?php esc_html_e( 'Save & New', 'casben-business-suite' ); ?>
 					</button>
+
+<?php endif; ?>
 
 					<a href="<?php echo esc_url( admin_url( 'admin.php?page=casben-products' ) ); ?>" class="button">
 						<?php esc_html_e( 'Cancel', 'casben-business-suite' ); ?>

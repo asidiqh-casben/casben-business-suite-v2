@@ -22,6 +22,11 @@ class CASBEN_Product_Admin {
 	 * Products page.
 	 */
 	public function products_page() {
+
+		$action = isset( $_GET['action'] )
+		? sanitize_key( wp_unslash( $_GET['action'] ) )
+		: '';
+
 		?>
 
 		<div class="wrap">

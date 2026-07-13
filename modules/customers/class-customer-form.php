@@ -201,9 +201,13 @@ if ( $customer_id > 0 ) {
 						?>
 					</button>
 
-					<button type="submit" name="casben_action" value="save_new" class="button">
+					<?php if ( ! $is_edit ) : ?>
+
+						<button type="submit" name="casben_action" value="save_new" class="button">
 						<?php esc_html_e( 'Save & New', 'casben-business-suite' ); ?>
 					</button>
+
+<?php endif; ?>
 
 					<a href="<?php echo esc_url( admin_url( 'admin.php?page=casben-customers' ) ); ?>" class="button">
 						<?php esc_html_e( 'Cancel', 'casben-business-suite' ); ?>
