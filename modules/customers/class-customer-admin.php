@@ -44,7 +44,15 @@ class CASBEN_Customers_Admin {
 			<hr class="wp-header-end">
 
 			<?php
-$message = isset( $_GET['message'] ) ? sanitize_key( wp_unslash( $_GET['message'] ) ) : '';
+		
+
+$message = isset( $_GET['message'] )
+	? sanitize_key( wp_unslash( $_GET['message'] ) )
+	: '';
+
+$count = isset( $_GET['count'] )
+	? absint( wp_unslash( $_GET['count'] ) )
+	: 0;
 
 if ( 'saved' === $message ) :
 ?>
@@ -65,6 +73,66 @@ if ( 'saved' === $message ) :
 	<p><?php esc_html_e( 'Customer deleted successfully.', 'casben-business-suite' ); ?></p>
 </div>
 
+<?php elseif ( 'bulk_deleted' === $message ) : ?>
+
+<div class="notice notice-success is-dismissible">
+	<p>
+		<?php
+		printf(
+			esc_html(
+				_n(
+					'%d customer deleted successfully.',
+					'%d customers deleted successfully.',
+					$count,
+					'casben-business-suite'
+				)
+			),
+			$count
+		);
+		?>
+	</p>
+</div>
+
+<?php elseif ( 'bulk_activated' === $message ) : ?>
+
+<div class="notice notice-success is-dismissible">
+	<p>
+		<?php
+		printf(
+			esc_html(
+				_n(
+					'%d customer activated successfully.',
+					'%d customers activated successfully.',
+					$count,
+					'casben-business-suite'
+				)
+			),
+			$count
+		);
+		?>
+	</p>
+</div>
+
+<?php elseif ( 'bulk_deactivated' === $message ) : ?>
+
+<div class="notice notice-success is-dismissible">
+	<p>
+		<?php
+		printf(
+			esc_html(
+				_n(
+					'%d customer deactivated successfully.',
+					'%d customers deactivated successfully.',
+					$count,
+					'casben-business-suite'
+				)
+			),
+			$count
+		);
+		?>
+	</p>
+</div>
+
 <?php endif; ?>
 			<?php
 
@@ -76,12 +144,22 @@ if ( 'saved' === $message ) :
 } else {
 
 	$list_table = new CASBEN_Customer_List();
+
+	//$list_table->process_bulk_action();
+	
 	$list_table->prepare_items();
+	
 	?>
 
 	<form method="post">
 
-		<?php $list_table->display(); ?>
+		<?php 
+		
+
+		$list_table->display();
+
+		
+		?>
 
 	</form>
 

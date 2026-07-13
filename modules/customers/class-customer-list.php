@@ -50,7 +50,20 @@ class CASBEN_Customer_List extends WP_List_Table {
 			'created_at'     => __( 'Created', 'casben-business-suite' ),
 		);
 	}
+		/**
+	 * Sortable columns.
+	 *
+	 * @return array
+	 */
+	protected function get_sortable_columns() {
 
+		return array(
+			'customer_code'  => array( 'customer_code', true ),
+			'company_name'   => array( 'company_name', false ),
+			'contact_person' => array( 'contact_person', false ),
+			'created_at'     => array( 'created_at', false ),
+		);
+	}
 	/**
 	 * Checkbox column.
 	 *
@@ -227,8 +240,29 @@ private function get_per_page() {
 			$args[] = $like;
 			$args[] = $like;
 		}
+				$allowed_orderby = array(
+			'id',
+			'customer_code',
+			'company_name',
+			'contact_person',
+			'created_at',
+		);
 
-		$query .= ' ORDER BY id DESC LIMIT %d OFFSET %d';
+		$orderby = isset( $_GET['orderby'] )
+			? sanitize_key( wp_unslash( $_GET['orderby'] ) )
+			: 'id';
+
+		if ( ! in_array( $orderby, $allowed_orderby, true ) ) {
+			$orderby = 'id';
+		}
+
+		$order = isset( $_GET['order'] )
+			? strtoupper( sanitize_key( wp_unslash( $_GET['order'] ) ) )
+			: 'DESC';
+
+		$order = ( 'ASC' === $order ) ? 'ASC' : 'DESC';
+
+		$query .= " ORDER BY {$orderby} {$order} LIMIT %d OFFSET %d";
 		$args[] = max( 1, (int) $per_page );
 		$args[] = max( 0, (int) ( ( max( 1, (int) $page ) - 1 ) * max( 1, (int) $per_page ) ) );
 
@@ -248,11 +282,31 @@ private function get_per_page() {
 		/**
 	 * Process bulk actions.
 	 */
+		/**
+	 * Process bulk actions.
+	 */
+		/**
+	 * Process bulk actions.
+	 */
 	public function process_bulk_action() {
 
-		global $wpdb;
+		// Nothing selected.
+		if ( empty( $_POST['customer'] ) ) {
+			return;
+		}
 
-		$table = $wpdb->prefix . 'casben_customers';
+		// Verify nonce.
+		check_admin_referer( 'bulk-' . $this->_args['plural'] );
+
+		// Permission check.
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die(
+				esc_html__(
+					'You do not have permission to perform this action.',
+					'casben-business-suite'
+				)
+			);
+		}
 
 		$action = $this->current_action();
 
@@ -260,41 +314,38 @@ private function get_per_page() {
 			return;
 		}
 
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die(
-				esc_html__( 'You are not allowed to perform this action.', 'casben-business-suite' )
-			);
-		}
+		$customer_ids = array_map(
+			'absint',
+			(array) wp_unslash( $_POST['customer'] )
+		);
 
-		check_admin_referer( 'bulk-' . $this->_args['plural'] );
-
-		$customers = isset( $_POST['customer'] )
-			? array_map( 'absint', (array) wp_unslash( $_POST['customer'] ) )
-			: array();
-
-		if ( empty( $customers ) ) {
+		if ( empty( $customer_ids ) ) {
 			return;
 		}
 
-		switch ( $action ) {
+		global $wpdb;
 
-			case 'bulk_delete':
+		$table = $wpdb->prefix . 'casben_customers';
 
-				foreach ( $customers as $customer_id ) {
+		foreach ( $customer_ids as $customer_id ) {
+
+			switch ( $action ) {
+
+				case 'bulk_delete':
 
 					$wpdb->delete(
 						$table,
 						array(
 							'id' => $customer_id,
 						),
-						array( '%d' )
+						array(
+							'%d',
+						)
 					);
-				}
 
-				break;
-							case 'bulk_activate':
+					break;
 
-				foreach ( $customers as $customer_id ) {
+				case 'bulk_activate':
 
 					$wpdb->update(
 						$table,
@@ -304,16 +355,17 @@ private function get_per_page() {
 						array(
 							'id' => $customer_id,
 						),
-						array( '%d' ),
-						array( '%d' )
+						array(
+							'%d',
+						),
+						array(
+							'%d',
+						)
 					);
-				}
 
-				break;
+					break;
 
-			case 'bulk_deactivate':
-
-				foreach ( $customers as $customer_id ) {
+				case 'bulk_deactivate':
 
 					$wpdb->update(
 						$table,
@@ -323,19 +375,48 @@ private function get_per_page() {
 						array(
 							'id' => $customer_id,
 						),
-						array( '%d' ),
-						array( '%d' )
+						array(
+							'%d',
+						),
+						array(
+							'%d',
+						)
 					);
-				}
 
+					break;
+			}
+		}
+
+		$message = '';
+
+		switch ( $action ) {
+
+			case 'bulk_delete':
+				$message = 'bulk_deleted';
+				break;
+
+			case 'bulk_activate':
+				$message = 'bulk_activated';
+				break;
+
+			case 'bulk_deactivate':
+				$message = 'bulk_deactivated';
 				break;
 		}
+
+		wp_safe_redirect(
+			admin_url(
+				'admin.php?page=casben-customers&message=' . $message . '&count=' . count( $customer_ids )
+			)
+	);
+
+	exit;
 	}
 	public function prepare_items() {
-		$this->process_bulk_action();
+		
 		$columns  = $this->get_columns();
 		$hidden   = array();
-		$sortable = array();
+		$sortable = $this->get_sortable_columns();
 
 		$this->_column_headers = array(
 			$columns,

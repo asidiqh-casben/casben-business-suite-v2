@@ -17,6 +17,7 @@ class CASBEN_Customer_Save {
 	public function __construct() {
 		add_action( 'admin_init', array( $this, 'save_customer' ) );
 		add_action( 'admin_init', array( $this, 'delete_customer' ) );
+		add_action( 'admin_init', array( $this, 'process_bulk_actions' ) );
 
 	}
 
@@ -161,4 +162,18 @@ public function delete_customer() {
 
 	exit;
 	}
+	/**
+ * Process customer bulk actions.
+ */
+public function process_bulk_actions() {
+
+	if ( ! isset( $_POST['customer'] ) ) {
+		return;
+	}
+
+	$list_table = new CASBEN_Customer_List();
+
+	$list_table->process_bulk_action();
+
+}
 }
