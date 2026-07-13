@@ -14,8 +14,32 @@ class CASBEN_Product_Admin {
 	/**
 	 * Constructor.
 	 */
-	public function __construct() {
-		// Menu registration is handled by CASBEN_Admin_Menu.
+		public function __construct() {
+
+		add_action(
+			'admin_init',
+			array( $this, 'handle_bulk_actions' )
+		);
+
+	}
+
+
+	/**
+	 * Handle bulk actions.
+	 */
+	public function handle_bulk_actions() {
+
+		if (
+			! isset( $_GET['page'] )
+			|| 'casben-products' !== $_GET['page']
+		) {
+			return;
+		}
+
+		$list_table = new CASBEN_Product_List();
+
+		$list_table->process_bulk_action();
+
 	}
 
 	/**
@@ -23,6 +47,7 @@ class CASBEN_Product_Admin {
 	 */
 	public function products_page() {
 
+	
 		$action = isset( $_GET['action'] )
 		? sanitize_key( wp_unslash( $_GET['action'] ) )
 		: '';
@@ -144,19 +169,16 @@ class CASBEN_Product_Admin {
 				$form->display();
 
 			} else {
-
-								$list_table = new CASBEN_Product_List();
-
-				$list_table->process_bulk_action();
-
+				$list_table = new CASBEN_Product_List();
 				$list_table->prepare_items();
-
+		
 				?>
 
 				<form method="post">
 
 					<?php
 					$list_table->display();
+
 					?>
 
 				</form>
