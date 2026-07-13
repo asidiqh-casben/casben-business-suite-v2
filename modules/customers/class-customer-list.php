@@ -46,6 +46,7 @@ class CASBEN_Customer_List extends WP_List_Table {
 			'mobile'         => __( 'Mobile', 'casben-business-suite' ),
 			'email'          => __( 'Email', 'casben-business-suite' ),
 			'ntn'            => __( 'NTN', 'casben-business-suite' ),
+			'status'         => __( 'Status', 'casben-business-suite' ),
 			'created_at'     => __( 'Created', 'casben-business-suite' ),
 		);
 	}
@@ -60,6 +61,19 @@ class CASBEN_Customer_List extends WP_List_Table {
 		return sprintf(
 			'<input type="checkbox" name="customer[]" value="%d" />',
 			absint( $item['id'] )
+		);
+	}
+		/**
+	 * Get bulk actions.
+	 *
+	 * @return array
+	 */
+	protected function get_bulk_actions() {
+
+		return array(
+			'bulk_delete'     => __( 'Delete', 'casben-business-suite' ),
+			'bulk_activate'   => __( 'Activate', 'casben-business-suite' ),
+			'bulk_deactivate' => __( 'Deactivate', 'casben-business-suite' ),
 		);
 	}
 
@@ -111,13 +125,16 @@ class CASBEN_Customer_List extends WP_List_Table {
 	 */
 	protected function column_default( $item, $column_name ) {
 		if ( 'status' === $column_name ) {
-			return (int) ( $item['status'] ?? 0 ) === 1
-				? __( 'Active', 'casben-business-suite' )
-				: __( 'Inactive', 'casben-business-suite' );
+
+				if ( (int) ( $item['status'] ?? 0 ) === 1 ) {
+				return '<span style="color:green;font-weight:600;">● Active</span>';
+			}
+
+				return '<span style="color:#a00;font-weight:600;">● Inactive</span>';
 		}
 
-		return isset( $item[ $column_name ] ) ? esc_html( $item[ $column_name ] ) : '';
-	}
+				return isset( $item[ $column_name ] ) ? esc_html( $item[ $column_name ] ) : '';
+			}
 
 	/**
 	 * Render search box.
@@ -225,7 +242,97 @@ private function get_per_page() {
 	/**
 	 * Prepare table items.
 	 */
+		/**
+	 * Process bulk actions.
+	 */
+		/**
+	 * Process bulk actions.
+	 */
+	public function process_bulk_action() {
+
+		global $wpdb;
+
+		$table = $wpdb->prefix . 'casben_customers';
+
+		$action = $this->current_action();
+
+		if ( empty( $action ) ) {
+			return;
+		}
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die(
+				esc_html__( 'You are not allowed to perform this action.', 'casben-business-suite' )
+			);
+		}
+
+		check_admin_referer( 'bulk-' . $this->_args['plural'] );
+
+		$customers = isset( $_POST['customer'] )
+			? array_map( 'absint', (array) wp_unslash( $_POST['customer'] ) )
+			: array();
+
+		if ( empty( $customers ) ) {
+			return;
+		}
+
+		switch ( $action ) {
+
+			case 'bulk_delete':
+
+				foreach ( $customers as $customer_id ) {
+
+					$wpdb->delete(
+						$table,
+						array(
+							'id' => $customer_id,
+						),
+						array( '%d' )
+					);
+				}
+
+				break;
+							case 'bulk_activate':
+
+				foreach ( $customers as $customer_id ) {
+
+					$wpdb->update(
+						$table,
+						array(
+							'status' => 1,
+						),
+						array(
+							'id' => $customer_id,
+						),
+						array( '%d' ),
+						array( '%d' )
+					);
+				}
+
+				break;
+
+			case 'bulk_deactivate':
+
+				foreach ( $customers as $customer_id ) {
+
+					$wpdb->update(
+						$table,
+						array(
+							'status' => 0,
+						),
+						array(
+							'id' => $customer_id,
+						),
+						array( '%d' ),
+						array( '%d' )
+					);
+				}
+
+				break;
+		}
+	}
 	public function prepare_items() {
+		$this->process_bulk_action();
 		$columns  = $this->get_columns();
 		$hidden   = array();
 		$sortable = array();
