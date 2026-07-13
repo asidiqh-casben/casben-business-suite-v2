@@ -34,7 +34,7 @@ class CASBEN_Database_Schema {
 		CASBEN_Schema_Customers::create_table();
 
 		// These will be enabled as we complete each schema.
-		// CASBEN_Schema_Products::create_table();
+		CASBEN_Schema_Products::create_table();
 		// CASBEN_Schema_Invoices::create_table();
 		// CASBEN_Schema_Invoice_Items::create_table();
 		// CASBEN_Schema_Settings::create_table();
