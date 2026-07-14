@@ -29,6 +29,11 @@ class CASBEN_Loader {
 		require_once CASBEN_PLUGIN_DIR . 'includes/class-admin.php';
 
 		/*
+ 		* Settings Module
+ 		*/
+		require_once CASBEN_PLUGIN_DIR . 'modules/settings/class-settings.php';
+
+		/*
 		 * Admin Menu
 		 */
 		require_once CASBEN_PLUGIN_DIR . 'includes/admin/class-admin-menu.php';

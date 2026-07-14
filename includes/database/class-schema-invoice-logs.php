@@ -33,12 +33,7 @@ class CASBEN_Schema_Invoice_Logs {
 
 			reference_no VARCHAR(100) DEFAULT NULL,
 
-			request_type ENUM(
-				'SUBMIT',
-				'RETRY',
-				'CANCEL',
-				'STATUS_CHECK'
-			) NOT NULL DEFAULT 'SUBMIT',
+			request_type VARCHAR(20) NOT NULL DEFAULT 'SUBMIT',
 
 			request_payload LONGTEXT DEFAULT NULL,
 
@@ -46,11 +41,7 @@ class CASBEN_Schema_Invoice_Logs {
 
 			http_status SMALLINT(5) UNSIGNED DEFAULT NULL,
 
-			fbr_status ENUM(
-				'PENDING',
-				'SUCCESS',
-				'FAILED'
-			) NOT NULL DEFAULT 'PENDING',
+			fbr_status VARCHAR(20) NOT NULL DEFAULT 'PENDING',
 
 			error_message TEXT DEFAULT NULL,
 
@@ -62,18 +53,18 @@ class CASBEN_Schema_Invoice_Logs {
 
 			PRIMARY KEY (id),
 
-			KEY invoice_id_idx (invoice_id),
+			INDEX invoice_id_idx (invoice_id),
 
-			KEY reference_no_idx (reference_no),
+			INDEX reference_no_idx (reference_no),
 
-			KEY request_type_idx (request_type),
+			INDEX request_type_idx (request_type),
 
-			KEY fbr_status_idx (fbr_status),
+			INDEX fbr_status_idx (fbr_status),
 
-			KEY created_at_idx (created_at)
+			INDEX created_at_idx (created_at)
 
 		) {$charset_collate};";
-
+			
 		dbDelta( $sql );
 	}
 }

@@ -14,7 +14,7 @@ class CASBEN_Database_Schema {
 	/**
 	 * Database Version.
 	 */
-	const DB_VERSION = '1.0.1';
+	const DB_VERSION = '1.0.2';
 
 	/**
 	 * Create or update all plugin tables.

@@ -26,6 +26,11 @@ class CASBEN_Activator {
 		CASBEN_Database::install();
 
 		/*
+		 * Install default business settings.
+		 */
+		CASBEN_Settings::install_defaults();
+
+		/*
 		 * Save plugin version.
 		 */
 		update_option(
@@ -41,35 +46,6 @@ class CASBEN_Activator {
 			update_option(
 				'casben_install_time',
 				current_time( 'timestamp' )
-			);
-
-		}
-
-		/*
-		 * Default plugin settings.
-		 */
-		if ( ! get_option( 'casben_settings' ) ) {
-
-			update_option(
-				'casben_settings',
-				array(
-
-					'company_name' => '',
-					'company_address' => '',
-					'company_phone' => '',
-					'company_email' => '',
-
-					'ntn' => '',
-					'strn' => '',
-
-					'fbr_mode' => 'sandbox',
-					'fbr_api_url' => '',
-					'fbr_bearer_token' => '',
-
-					'invoice_prefix' => 'C',
-					'invoice_counter' => 1,
-
-				)
 			);
 
 		}
