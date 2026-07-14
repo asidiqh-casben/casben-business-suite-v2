@@ -353,7 +353,7 @@ class CASBEN_Invoice_Save {
 		wp_safe_redirect(
 
 			admin_url(
-				'admin.php?page=casben-invoices'
+				'admin.php?page=casben-invoices&message=saved'
 			)
 
 		);

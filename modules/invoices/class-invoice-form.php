@@ -9,15 +9,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+
 class CASBEN_Invoice_Form {
 
 
 	/**
-	 * Display invoice form.
+	 * Render invoice form.
 	 *
 	 * @return void
 	 */
 	public static function render() {
+
+		$customers = self::get_customers();
+
+		$products = self::get_products();
 
 		?>
 
@@ -32,24 +37,23 @@ class CASBEN_Invoice_Form {
 
 
 				<?php
+
 				wp_nonce_field(
 					'casben_save_invoice',
 					'casben_invoice_nonce'
 				);
+
 				?>
 
 
-				<input
-					type="hidden"
-					name="action"
-					value="casben_save_invoice"
-				>
+				<input type="hidden" name="action" value="casben_save_invoice">
 
 
 				<table class="form-table">
 
 
 					<tr>
+
 						<th>
 							<label for="invoice_date">
 								<?php esc_html_e( 'Invoice Date', 'casben-business-suite' ); ?>
@@ -67,8 +71,8 @@ class CASBEN_Invoice_Form {
 							>
 
 						</td>
-					</tr>
 
+					</tr>
 
 
 					<tr>
@@ -92,7 +96,6 @@ class CASBEN_Invoice_Form {
 					</tr>
 
 
-
 					<tr>
 
 						<th>
@@ -104,15 +107,22 @@ class CASBEN_Invoice_Form {
 
 						<td>
 
-							<select
-								name="customer_id"
-								id="customer_id"
-								required
-							>
+							<select name="customer_id" id="customer_id" required>
 
 								<option value="">
 									<?php esc_html_e( 'Select Customer', 'casben-business-suite' ); ?>
 								</option>
+
+
+								<?php foreach ( $customers as $customer ) : ?>
+
+									<option value="<?php echo esc_attr( $customer->id ); ?>">
+
+										<?php echo esc_html( $customer->company_name ); ?>
+
+									</option>
+
+								<?php endforeach; ?>
 
 
 							</select>
@@ -120,7 +130,6 @@ class CASBEN_Invoice_Form {
 						</td>
 
 					</tr>
-
 
 
 					<tr>
@@ -158,39 +167,26 @@ class CASBEN_Invoice_Form {
 
 				<table class="widefat">
 
+
 					<thead>
 
 						<tr>
 
-							<th>
-								<?php esc_html_e( 'Product ID', 'casben-business-suite' ); ?>
-							</th>
+							<th><?php esc_html_e( 'Product', 'casben-business-suite' ); ?></th>
 
-							<th>
-								<?php esc_html_e( 'Description', 'casben-business-suite' ); ?>
-							</th>
+							<th><?php esc_html_e( 'Description', 'casben-business-suite' ); ?></th>
 
-							<th>
-								<?php esc_html_e( 'Quantity', 'casben-business-suite' ); ?>
-							</th>
+							<th><?php esc_html_e( 'Quantity', 'casben-business-suite' ); ?></th>
 
-							<th>
-								<?php esc_html_e( 'Unit Price', 'casben-business-suite' ); ?>
-							</th>
+							<th><?php esc_html_e( 'Unit Price', 'casben-business-suite' ); ?></th>
 
-							<th>
-								<?php esc_html_e( 'Discount', 'casben-business-suite' ); ?>
-							</th>
+							<th><?php esc_html_e( 'Discount', 'casben-business-suite' ); ?></th>
 
-							<th>
-								<?php esc_html_e( 'Tax %', 'casben-business-suite' ); ?>
-							</th>
+							<th><?php esc_html_e( 'Tax %', 'casben-business-suite' ); ?></th>
 
 						</tr>
 
-
 					</thead>
-
 
 
 					<tbody>
@@ -201,14 +197,27 @@ class CASBEN_Invoice_Form {
 
 							<td>
 
-								<input
-									type="number"
-									name="items[0][product_id]"
-									value=""
-								>
+								<select name="items[0][product_id]">
+
+									<option value="">
+										<?php esc_html_e( 'Select Product', 'casben-business-suite' ); ?>
+									</option>
+
+
+									<?php foreach ( $products as $product ) : ?>
+
+										<option value="<?php echo esc_attr( $product->id ); ?>">
+
+											<?php echo esc_html( $product->product_name ); ?>
+
+										</option>
+
+									<?php endforeach; ?>
+
+
+								</select>
 
 							</td>
-
 
 
 							<td>
@@ -216,12 +225,9 @@ class CASBEN_Invoice_Form {
 								<input
 									type="text"
 									name="items[0][description]"
-									value=""
-									required
 								>
 
 							</td>
-
 
 
 							<td>
@@ -231,11 +237,9 @@ class CASBEN_Invoice_Form {
 									step="0.001"
 									name="items[0][quantity]"
 									value="1"
-									required
 								>
 
 							</td>
-
 
 
 							<td>
@@ -245,11 +249,9 @@ class CASBEN_Invoice_Form {
 									step="0.01"
 									name="items[0][unit_price]"
 									value="0"
-									required
 								>
 
 							</td>
-
 
 
 							<td>
@@ -262,7 +264,6 @@ class CASBEN_Invoice_Form {
 								>
 
 							</td>
-
 
 
 							<td>
@@ -286,11 +287,12 @@ class CASBEN_Invoice_Form {
 				</table>
 
 
-
 				<?php
+
 				submit_button(
 					__( 'Save Invoice', 'casben-business-suite' )
 				);
+
 				?>
 
 
@@ -304,4 +306,45 @@ class CASBEN_Invoice_Form {
 
 	}
 
+
+	/**
+	 * Get customers.
+	 *
+	 * @return array
+	 */
+	private static function get_customers() {
+
+	global $wpdb;
+
+	$table = $wpdb->prefix . 'casben_customers';
+
+
+	return $wpdb->get_results(
+		"SELECT id, company_name
+		FROM {$table}
+		ORDER BY company_name ASC"
+	);
+}
+
+
+
+	/**
+	 * Get products.
+	 *
+	 * @return array
+	 */
+	private static function get_products() {
+
+		global $wpdb;
+
+		$table = $wpdb->prefix . 'casben_products';
+
+
+		return $wpdb->get_results(
+			"SELECT id, product_name
+			FROM {$table}
+			WHERE status = 1
+			ORDER BY product_name ASC"
+		);
+	}
 }

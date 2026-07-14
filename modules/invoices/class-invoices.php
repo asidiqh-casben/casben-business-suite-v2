@@ -45,7 +45,8 @@ class CASBEN_Invoices {
 
 		// Invoice Model.
 		require_once CASBEN_PLUGIN_DIR . 'modules/invoices/class-invoice.php';
-
+		require_once CASBEN_PLUGIN_DIR . 'modules/invoices/class-invoice-number.php';
+		require_once CASBEN_PLUGIN_DIR . 'modules/invoices/class-invoice-calculator.php';
 		// Admin UI.
 		require_once CASBEN_PLUGIN_DIR . 'modules/invoices/class-invoice-admin.php';
 		require_once CASBEN_PLUGIN_DIR . 'modules/invoices/class-invoice-list.php';

@@ -80,6 +80,79 @@ class CASBEN_Invoice {
 		return (int) $this->db->insert_id;
 	}
 
+		/**
+	 * Add invoice item.
+	 *
+	 * @param array $data Invoice item data.
+	 *
+	 * @return int|false
+	 */
+	public function add_item( $data ) {
+
+		$result = $this->db->insert(
+			$this->items_table,
+			$data
+		);
+
+		if ( false === $result ) {
+			return false;
+		}
+
+		return (int) $this->db->insert_id;
+	}
+
+
+	/**
+	 * Add multiple invoice items.
+	 *
+	 * @param int   $invoice_id Invoice ID.
+	 * @param array $items      Invoice items.
+	 *
+	 * @return bool
+	 */
+	public function add_items( $invoice_id, $items ) {
+
+		$invoice_id = absint( $invoice_id );
+
+		foreach ( $items as $item ) {
+
+			$item['invoice_id'] = $invoice_id;
+
+			$result = $this->add_item( $item );
+
+			if ( false === $result ) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+
+	/**
+	 * Get invoice items.
+	 *
+	 * @param int $invoice_id Invoice ID.
+	 *
+	 * @return array
+	 */
+	public function get_items( $invoice_id ) {
+
+		$sql = "
+			SELECT *
+			FROM {$this->items_table}
+			WHERE invoice_id = %d
+			ORDER BY id ASC
+		";
+
+		return $this->db->get_results(
+			$this->db->prepare(
+				$sql,
+				absint( $invoice_id )
+			),
+			ARRAY_A
+		);
+	}
 
 	/**
 	 * Update invoice.
@@ -357,12 +430,15 @@ class CASBEN_Invoice {
 			WHERE " . implode( ' AND ', $where );
 
 
-		return (int) $this->db->get_var(
-			$this->db->prepare(
-				$sql,
-				$params
-			)
-		);
+		if ( ! empty( $params ) ) {
+
+	$sql = $this->db->prepare(
+		$sql,
+		$params
+	);
+	}
+
+		return (int) $this->db->get_var( $sql );
 	}
 
 

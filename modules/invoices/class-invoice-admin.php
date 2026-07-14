@@ -11,6 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class CASBEN_Invoice_Admin {
 
+
 	/**
 	 * Display invoices page.
 	 *
@@ -18,12 +19,47 @@ class CASBEN_Invoice_Admin {
 	 */
 	public function invoices_page() {
 
+
 		$action = isset( $_GET['action'] )
-			? sanitize_key( wp_unslash( $_GET['action'] ) )
+			? sanitize_key(
+				wp_unslash( $_GET['action'] )
+			)
 			: '';
 
-		/*
-		 * Add invoice form.
+			$message = isset( $_GET['message'] )
+			? sanitize_key(
+				wp_unslash( $_GET['message'] )
+			)
+			: '';
+
+		if ( 'saved' === $message ) {
+			?>
+			<div class="notice notice-success is-dismissible">
+				<p>
+					<?php esc_html_e(
+						'Invoice saved successfully.',
+						'casben-business-suite'
+					); ?>
+				</p>
+			</div>
+			<?php
+		}
+
+		if ( 'error' === $message ) {
+			?>
+			<div class="notice notice-error is-dismissible">
+				<p>
+					<?php esc_html_e(
+						'Unable to save invoice.',
+						'casben-business-suite'
+					); ?>
+				</p>
+			</div>
+			<?php
+		}
+
+		/**
+		 * Add invoice.
 		 */
 		if ( 'add' === $action ) {
 
@@ -33,28 +69,39 @@ class CASBEN_Invoice_Admin {
 		}
 
 
-		/*
-		 * Invoice list.
+		/**
+		 * Load list table.
 		 */
-		if ( ! class_exists( 'WP_List_Table' ) ) {
-			require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
+		if ( ! class_exists( 'CASBEN_Invoice_List' ) ) {
+
+			require_once CASBEN_PLUGIN_DIR . 'modules/invoices/class-invoice-list.php';
 		}
 
 
 		$list_table = new CASBEN_Invoice_List();
 
+
 		$list_table->prepare_items();
+
 
 		?>
 
 		<div class="wrap">
 
+
 			<h1 class="wp-heading-inline">
+
 				<?php esc_html_e( 'Invoices', 'casben-business-suite' ); ?>
+
 			</h1>
 
 
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=casben-invoices&action=add' ) ); ?>" class="page-title-action">
+			<a href="<?php echo esc_url(
+				admin_url(
+					'admin.php?page=casben-invoices&action=add'
+				)
+			); ?>"
+			class="page-title-action">
 
 				<?php esc_html_e( 'Add New', 'casben-business-suite' ); ?>
 
@@ -65,6 +112,7 @@ class CASBEN_Invoice_Admin {
 
 
 			<form method="get">
+
 
 				<input type="hidden" name="page" value="casben-invoices">
 
@@ -81,9 +129,12 @@ class CASBEN_Invoice_Admin {
 
 				?>
 
+
 			</form>
 
+
 		</div>
+
 
 		<?php
 	}
