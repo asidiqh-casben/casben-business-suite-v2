@@ -18,6 +18,15 @@ class CASBEN_Invoices {
 	 */
 	public $admin;
 
+
+	/**
+	 * Invoice save handler.
+	 *
+	 * @var CASBEN_Invoice_Save
+	 */
+	public $save;
+
+
 	/**
 	 * Constructor.
 	 */
@@ -27,8 +36,9 @@ class CASBEN_Invoices {
 
 		$this->admin = new CASBEN_Invoice_Admin();
 
-		//new CASBEN_Invoice_Save();
+		$this->save = new CASBEN_Invoice_Save();
 	}
+
 
 	/**
 	 * Include required files.
@@ -38,8 +48,11 @@ class CASBEN_Invoices {
 	private function includes() {
 
 		require_once CASBEN_PLUGIN_DIR . 'modules/invoices/class-invoice-admin.php';
+
 		require_once CASBEN_PLUGIN_DIR . 'modules/invoices/class-invoice-list.php';
+
 		require_once CASBEN_PLUGIN_DIR . 'modules/invoices/class-invoice-form.php';
+
 		require_once CASBEN_PLUGIN_DIR . 'modules/invoices/class-invoice-save.php';
 	}
 }

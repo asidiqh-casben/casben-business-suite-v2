@@ -11,6 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class CASBEN_Invoice_Form {
 
+
 	/**
 	 * Display invoice form.
 	 *
@@ -27,9 +28,26 @@ class CASBEN_Invoice_Form {
 			</h1>
 
 
-			<form method="post" action="">
+			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+
+
+				<?php
+				wp_nonce_field(
+					'casben_save_invoice',
+					'casben_invoice_nonce'
+				);
+				?>
+
+
+				<input
+					type="hidden"
+					name="action"
+					value="casben_save_invoice"
+				>
+
 
 				<table class="form-table">
+
 
 					<tr>
 						<th>
@@ -39,6 +57,7 @@ class CASBEN_Invoice_Form {
 						</th>
 
 						<td>
+
 							<input
 								type="date"
 								name="invoice_date"
@@ -46,52 +65,55 @@ class CASBEN_Invoice_Form {
 								value="<?php echo esc_attr( current_time( 'Y-m-d' ) ); ?>"
 								required
 							>
+
 						</td>
 					</tr>
 
 
+
 					<tr>
+
+						<th>
+							<label for="due_date">
+								<?php esc_html_e( 'Due Date', 'casben-business-suite' ); ?>
+							</label>
+						</th>
+
+						<td>
+
+							<input
+								type="date"
+								name="due_date"
+								id="due_date"
+							>
+
+						</td>
+
+					</tr>
+
+
+
+					<tr>
+
 						<th>
 							<label for="customer_id">
 								<?php esc_html_e( 'Customer', 'casben-business-suite' ); ?>
 							</label>
 						</th>
 
+
 						<td>
-							<select name="customer_id" id="customer_id" required>
+
+							<select
+								name="customer_id"
+								id="customer_id"
+								required
+							>
 
 								<option value="">
 									<?php esc_html_e( 'Select Customer', 'casben-business-suite' ); ?>
 								</option>
 
-							</select>
-						</td>
-
-					</tr>
-
-
-					<tr>
-						<th>
-							<label for="invoice_type">
-								<?php esc_html_e( 'Invoice Type', 'casben-business-suite' ); ?>
-							</label>
-						</th>
-
-						<td>
-
-							<select name="invoice_type">
-
-								<option value="SALE">
-									<?php esc_html_e( 'Sale', 'casben-business-suite' ); ?>
-								</option>
-
-								<option value="DEBIT_NOTE">
-									<?php esc_html_e( 'Debit Note', 'casben-business-suite' ); ?>
-								</option>
-
-								<option value="CREDIT_NOTE">
-									<?php esc_html_e( 'Credit Note', 'casben-business-suite' ); ?>
-								</option>
 
 							</select>
 
@@ -100,46 +122,21 @@ class CASBEN_Invoice_Form {
 					</tr>
 
 
-					<tr>
-
-						<th>
-							<label for="supply_type">
-								<?php esc_html_e( 'Supply Type', 'casben-business-suite' ); ?>
-							</label>
-						</th>
-
-						<td>
-
-							<select name="supply_type">
-
-								<option value="GOODS">
-									<?php esc_html_e( 'Goods', 'casben-business-suite' ); ?>
-								</option>
-
-								<option value="SERVICES">
-									<?php esc_html_e( 'Services', 'casben-business-suite' ); ?>
-								</option>
-
-							</select>
-
-						</td>
-
-					</tr>
-
 
 					<tr>
 
 						<th>
-							<label for="remarks">
-								<?php esc_html_e( 'Remarks', 'casben-business-suite' ); ?>
+							<label for="notes">
+								<?php esc_html_e( 'Notes', 'casben-business-suite' ); ?>
 							</label>
 						</th>
+
 
 						<td>
 
 							<textarea
-								name="remarks"
-								id="remarks"
+								name="notes"
+								id="notes"
 								rows="4"
 								cols="50"
 							></textarea>
@@ -148,7 +145,9 @@ class CASBEN_Invoice_Form {
 
 					</tr>
 
+
 				</table>
+
 
 
 				<h2>
@@ -156,66 +155,150 @@ class CASBEN_Invoice_Form {
 				</h2>
 
 
+
 				<table class="widefat">
 
 					<thead>
 
 						<tr>
-							<th><?php esc_html_e( 'Product', 'casben-business-suite' ); ?></th>
-							<th><?php esc_html_e( 'Quantity', 'casben-business-suite' ); ?></th>
-							<th><?php esc_html_e( 'Unit Price', 'casben-business-suite' ); ?></th>
-							<th><?php esc_html_e( 'Tax %', 'casben-business-suite' ); ?></th>
-							<th><?php esc_html_e( 'Total', 'casben-business-suite' ); ?></th>
+
+							<th>
+								<?php esc_html_e( 'Product ID', 'casben-business-suite' ); ?>
+							</th>
+
+							<th>
+								<?php esc_html_e( 'Description', 'casben-business-suite' ); ?>
+							</th>
+
+							<th>
+								<?php esc_html_e( 'Quantity', 'casben-business-suite' ); ?>
+							</th>
+
+							<th>
+								<?php esc_html_e( 'Unit Price', 'casben-business-suite' ); ?>
+							</th>
+
+							<th>
+								<?php esc_html_e( 'Discount', 'casben-business-suite' ); ?>
+							</th>
+
+							<th>
+								<?php esc_html_e( 'Tax %', 'casben-business-suite' ); ?>
+							</th>
+
 						</tr>
+
 
 					</thead>
 
 
+
 					<tbody>
+
 
 						<tr>
 
+
 							<td>
-								<select name="product_id[]">
-									<option value="">
-										<?php esc_html_e( 'Select Product', 'casben-business-suite' ); ?>
-									</option>
-								</select>
+
+								<input
+									type="number"
+									name="items[0][product_id]"
+									value=""
+								>
+
 							</td>
 
 
+
 							<td>
-								<input type="number" name="quantity[]" value="1">
+
+								<input
+									type="text"
+									name="items[0][description]"
+									value=""
+									required
+								>
+
 							</td>
 
 
+
 							<td>
-								<input type="number" step="0.01" name="unit_price[]" value="0">
+
+								<input
+									type="number"
+									step="0.001"
+									name="items[0][quantity]"
+									value="1"
+									required
+								>
+
 							</td>
 
 
+
 							<td>
-								<input type="number" step="0.01" name="tax_rate[]" value="18">
+
+								<input
+									type="number"
+									step="0.01"
+									name="items[0][unit_price]"
+									value="0"
+									required
+								>
+
 							</td>
 
 
+
 							<td>
-								<input type="number" step="0.01" name="line_total[]" value="0">
+
+								<input
+									type="number"
+									step="0.01"
+									name="items[0][discount_amount]"
+									value="0"
+								>
+
 							</td>
+
+
+
+							<td>
+
+								<input
+									type="number"
+									step="0.01"
+									name="items[0][tax_rate]"
+									value="18"
+								>
+
+							</td>
+
 
 						</tr>
 
+
 					</tbody>
+
 
 				</table>
 
 
-				<?php submit_button( __( 'Save Invoice', 'casben-business-suite' ) ); ?>
+
+				<?php
+				submit_button(
+					__( 'Save Invoice', 'casben-business-suite' )
+				);
+				?>
 
 
 			</form>
 
+
 		</div>
+
 
 		<?php
 
