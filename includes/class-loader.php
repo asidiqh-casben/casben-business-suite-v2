@@ -15,6 +15,8 @@ class CASBEN_Loader {
 
 	/**
 	 * Load all required classes and initialize the plugin.
+	 *
+	 * @return void
 	 */
 	public static function load() {
 
@@ -37,31 +39,45 @@ class CASBEN_Loader {
 		require_once CASBEN_PLUGIN_DIR . 'includes/class-activator.php';
 		require_once CASBEN_PLUGIN_DIR . 'includes/class-deactivator.php';
 
+
 		/*
- 		* Customers Module
- 		*/
-		//require_once CASBEN_PLUGIN_DIR . 'modules/customers/class-customer-admin.php';
+		 * Customers Module
+		 */
 		require_once CASBEN_PLUGIN_DIR . 'modules/customers/class-customer.php';
 
-		/*
- 		* Products Module
- 		*/
-		//require_once CASBEN_PLUGIN_DIR . 'modules/products/class-product-admin.php';
-		require_once CASBEN_PLUGIN_DIR . 'modules/products/class-product.php';
 
 		/*
-		 * Initialize Admin.
+		 * Products Module
+		 */
+		require_once CASBEN_PLUGIN_DIR . 'modules/products/class-product.php';
+
+
+		/*
+		 * Invoices Module
+		 */
+		require_once CASBEN_PLUGIN_DIR . 'modules/invoices/class-invoices.php';
+
+
+		/*
+		 * Initialize Admin
 		 */
 		if ( is_admin() ) {
 
 			CASBEN_Assets::init();
+
 			CASBEN_Admin::init();
+
 
 			// Initialize Customers Module
 			new CASBEN_Customers();
 
+
 			// Initialize Products Module
 			new CASBEN_Products();
+
+
+			// Initialize Invoices Module
+			new CASBEN_Invoices();
 
 		}
 
