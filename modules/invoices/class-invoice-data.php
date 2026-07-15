@@ -1,6 +1,8 @@
 <?php
 /**
- * Invoice Form
+ * Invoice Data Provider
+ *
+ * Provides lookup data for invoice forms.
  *
  * @package CASBEN_Business_Suite
  */
@@ -9,30 +11,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class CASBEN_Invoice_Form {
-
-	/**
-	 * Render invoice form.
-	 *
-	 * @return void
-	 */
-	public static function render() {
-
-		$customers = self::get_customers();
-
-		$products = self::get_products();
-
-		require CASBEN_PLUGIN_DIR .
-			'modules/invoices/views/invoice-form.php';
-
-	}
+class CASBEN_Invoice_Data {
 
 	/**
 	 * Get customers.
 	 *
 	 * @return array
 	 */
-	private static function get_customers() {
+	public static function get_customers() {
 
 		global $wpdb;
 
@@ -43,15 +29,14 @@ class CASBEN_Invoice_Form {
 			FROM {$table}
 			ORDER BY company_name ASC"
 		);
-
 	}
 
 	/**
-	 * Get products.
+	 * Get active products.
 	 *
 	 * @return array
 	 */
-	private static function get_products() {
+	public static function get_products() {
 
 		global $wpdb;
 
@@ -63,7 +48,5 @@ class CASBEN_Invoice_Form {
 			WHERE status = 1
 			ORDER BY product_name ASC"
 		);
-
 	}
-
 }

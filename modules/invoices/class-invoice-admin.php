@@ -59,13 +59,14 @@ class CASBEN_Invoice_Admin {
 		}
 
 		/**
-		 * Add invoice.
+		 * Add /Edit invoice.
 		 */
-		if ( 'add' === $action ) {
+		if ( in_array( $action, array( 'add', 'edit' ), true ) ) {
 
 			CASBEN_Invoice_Form::render();
 
 			return;
+
 		}
 
 

@@ -24,13 +24,17 @@ class CASBEN_Invoice_Save {
 		);
 	}
 
-
 	/**
 	 * Save invoice.
 	 *
 	 * @return void
 	 */
 	public function save_invoice() {
+
+		$calculator = new CASBEN_Invoice_Calculator();
+
+		$totals = $calculator->calculate( $invoice );
+
 
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( 'Unauthorized access.' );
@@ -102,51 +106,30 @@ class CASBEN_Invoice_Save {
 		 * Calculate totals.
 		 */
 
-		$subtotal = 0;
+			$invoice = array(
+	'discount_type'  => isset( $_POST['discount_type'] )
+		? sanitize_key( wp_unslash( $_POST['discount_type'] ) )
+		: 'fixed',
 
-		$tax_amount = 0;
+	'discount_value' => isset( $_POST['discount_value'] )
+		? (float) wp_unslash( $_POST['discount_value'] )
+		: 0,
 
-		$discount_amount = 0;
+	'tax_rate'       => isset( $_POST['tax_rate'] )
+		? (float) wp_unslash( $_POST['tax_rate'] )
+		: 18,
 
+	'items'          => $items,
+);
 
-		foreach ( $items as $item ) {
+$calculator = new CASBEN_Invoice_Calculator();
 
-			$quantity = isset( $item['quantity'] )
-				? floatval( $item['quantity'] )
-				: 0;
+$totals = $calculator->calculate( $invoice );
 
-
-			$unit_price = isset( $item['unit_price'] )
-				? floatval( $item['unit_price'] )
-				: 0;
-
-
-			$discount = isset( $item['discount_amount'] )
-				? floatval( $item['discount_amount'] )
-				: 0;
-
-
-			$tax_rate = isset( $item['tax_rate'] )
-				? floatval( $item['tax_rate'] )
-				: 18;
-
-
-			$line_total = ( $quantity * $unit_price ) - $discount;
-
-
-			$item_tax = ( $line_total * $tax_rate ) / 100;
-
-
-			$subtotal += $line_total;
-
-			$tax_amount += $item_tax;
-
-			$discount_amount += $discount;
-
-		}
-
-
-		$grand_total = $subtotal + $tax_amount - $discount_amount;
+$subtotal        = $totals['subtotal'];
+$discount_amount = $totals['discount_total'];
+$tax_amount      = $totals['tax_total'];
+$grand_total     = $totals['grand_total'];
 
 
 		/*
