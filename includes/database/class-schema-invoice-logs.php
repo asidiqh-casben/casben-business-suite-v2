@@ -53,18 +53,19 @@ class CASBEN_Schema_Invoice_Logs {
 
 			PRIMARY KEY (id),
 
-			INDEX invoice_id_idx (invoice_id),
+			KEY invoice_id_idx (invoice_id),
 
-			INDEX reference_no_idx (reference_no),
+			KEY reference_no_idx (reference_no),
 
-			INDEX request_type_idx (request_type),
+			KEY request_type_idx (request_type),
 
-			INDEX fbr_status_idx (fbr_status),
+			KEY fbr_status_idx (fbr_status),
 
-			INDEX created_at_idx (created_at)
+			KEY created_at_idx (created_at)
 
 		) {$charset_collate};";
-			
-		dbDelta( $sql );
-	}
+error_log( "===== Invoice Logs SQL START =====" );
+error_log( $sql );
+error_log( "===== Invoice Logs SQL END =====" );	
+}
 }

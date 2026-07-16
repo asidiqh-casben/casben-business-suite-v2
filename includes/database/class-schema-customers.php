@@ -90,6 +90,9 @@ class CASBEN_Schema_Customers {
 
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
+		error_log( 'START Customers dbDelta' );
 		dbDelta( $sql );
+		error_log( 'END Customers dbDelta' );
 	}
+	
 }

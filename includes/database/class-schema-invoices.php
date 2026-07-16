@@ -78,7 +78,8 @@ class CASBEN_Schema_Invoices {
 
 
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-
+		error_log( 'START Invoices dbDelta' );
 		dbDelta( $sql );
-	}
+		error_log( 'END Invoices dbDelta' );
+		}
 }

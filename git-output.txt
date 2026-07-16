@@ -1,0 +1,21 @@
+commit 4fd057d1e3185162dea96ce119fd7df25955c0c9
+Author: Muhammad Siddique <casben@pcamus.com>
+Date:   Wed Jul 15 13:00:43 2026 +0500
+
+    Calss-Invoice-Form has been split into views invoice form and other files
+
+ modules/invoices/class-invoice-admin.php           |   5 +-
+ modules/invoices/class-invoice-calculator.php      | 251 +++++++++++----
+ modules/invoices/class-invoice-data.php            |  52 +++
+ modules/invoices/class-invoice-form.php            | 305 +-----------------
+ modules/invoices/class-invoice-save.php            |  63 ++--
+ modules/invoices/class-invoices.php                |   3 +-
+ .../invoices/views/class-invoice-form-spare.php    | 223 +++++++++++++
+ .../{invoice-list.php => invoice-actions.php}      |   0
+ modules/invoices/views/invoice-form.php            | 260 +++++++++++++++
+ modules/invoices/views/invoice-header.php          |   0
+ modules/invoices/views/invoice-items.php           |   0
+ modules/invoices/views/invoice-notes.php           |   0
+ modules/invoices/views/invoice-totals.php          |   0
+ old-invoice-form.php                               | 350 +++++++++++++++++++++
+ 14 files changed, 1120 insertions(+), 392 deletions(-)

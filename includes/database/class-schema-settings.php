@@ -34,6 +34,8 @@ class CASBEN_Schema_Settings {
 		) {$charset_collate};";
 
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+		error_log( 'START Settings dbDelta' );
 		dbDelta( $sql );
+		error_log( 'END Settings dbDelta' );
 	}
 }

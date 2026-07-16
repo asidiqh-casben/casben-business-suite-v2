@@ -73,7 +73,9 @@ class CBS_Customers_DB {
 
         ) {$charset_collate};";
 
-        dbDelta($sql);
+        error_log( 'START Customers DB dbDelta' );
+		dbDelta( $sql );
+		error_log( 'END Customers DB dbDelta' )
     }
 
 }
