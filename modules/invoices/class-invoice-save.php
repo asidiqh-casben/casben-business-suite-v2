@@ -31,10 +31,6 @@ class CASBEN_Invoice_Save {
 	 */
 	public function save_invoice() {
 
-		$calculator = new CASBEN_Invoice_Calculator();
-
-		$totals = $calculator->calculate( $invoice );
-
 
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( 'Unauthorized access.' );

@@ -79,12 +79,13 @@ class CASBEN_Invoice_Calculator {
 
 		foreach ( $invoice['items'] as $item ) {
 
-			$calculated_item = $this->calculate_item( $item );
+		$calculated_item = $this->calculate_item( $item );
 
-			$results['items'][] = $calculated_item;
+		$results['items'][] = $calculated_item;
 
-			$results['subtotal'] += $calculated_item->line_total;
-		}
+		$results['subtotal'] += $calculated_item['line_total'];
+
+	}
 
 		$results['subtotal'] = $this->round_amount(
 			$results['subtotal']
@@ -135,32 +136,32 @@ class CASBEN_Invoice_Calculator {
 		return $results;
 	}
 	/**
- * Calculate a single invoice item.
- *
- * @param object $item Invoice item.
- * @return object
- */
-private function calculate_item( $item ) {
+ 	* Calculate a single invoice item.
+ 	*
+ 	* @param array $item Invoice item.
+ 	* @return array
+ 	*/
+	private function calculate_item( $item ) {
 
-	$quantity = isset( $item->quantity )
-		? (float) $item->quantity
-		: 0;
+		$quantity = isset( $item['quantity'] )
+			? (float) $item['quantity']
+			: 0;
 
-	$unit_price = isset( $item->unit_price )
-		? (float) $item->unit_price
-		: 0;
+		$unit_price = isset( $item['unit_price'] )
+			? (float) $item['unit_price']
+			: 0;
 
 		$line_total = $this->round_amount(
 			$quantity * $unit_price
 		);
 
-		$item->quantity   = $quantity;
-		$item->unit_price = $unit_price;
-		$item->line_total = $line_total;
+		$item['quantity']   = $quantity;
+		$item['unit_price'] = $unit_price;
+		$item['line_total'] = $line_total;
 
 		return $item;
-	}
-	/**
+
+	}	/**
 	 * Calculate invoice discount.
 	 *
 	 * Supported discount types:

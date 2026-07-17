@@ -28,25 +28,15 @@ class CASBEN_Invoice_Admin {
 	/**
 	 * Constructor.
 	 */
-	public function __construct() {
+		public function __construct() {
 
-		//$this->includes();
-
-		add_action(
-			'admin_menu',
-			array(
-				$this,
-				'register_menu',
-			)
-		);
-
-		add_action(
-			'admin_init',
-			array(
-				$this,
-				'handle_actions',
-			)
-		);
+    		add_action(
+        		'admin_init',
+        	array(
+            	$this,
+            	'handle_actions',
+        	)
+    	);
 
 	}
 

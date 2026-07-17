@@ -194,7 +194,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<input
 						type="number"
 						name="items[<?php echo esc_attr( $index ); ?>][discount_amount]"
-						value="<?php echo esc_attr( $item->discount ); ?>"
+						value="<?php echo esc_attr( isset( $item->discount_amount ) ? $item->discount_amount : 0 ); ?>"
 						step="0.01"
 						min="0"
 						class="small-text casben-discount"

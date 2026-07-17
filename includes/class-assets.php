@@ -59,7 +59,10 @@ class CASBEN_Assets {
 		wp_enqueue_script(
 			'casben-admin-script',
 			CASBEN_PLUGIN_URL . 'assets/js/admin-script.js',
-			array( 'jquery' ),
+			array(
+				'jquery',
+				'wp-util',
+			),
 			CASBEN_VERSION,
 			true
 		);

@@ -47,7 +47,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					type="number"
 					id="casben-subtotal"
 					name="subtotal"
-					value="<?php echo esc_attr( $subtotal ); ?>"
+					value="<?php echo esc_attr( $totals['subtotal'] ); ?>"
 					step="0.01"
 					class="regular-text"
 					readonly
@@ -76,7 +76,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					type="number"
 					id="casben-discount-total"
 					name="discount_total"
-					value="0.00"
+					value="<?php echo esc_attr( $totals['discount_total'] ); ?>"
 					step="0.01"
 					class="regular-text"
 					readonly
@@ -105,7 +105,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					type="number"
 					id="casben-tax-total"
 					name="tax_total"
-					value="<?php echo esc_attr( $tax_total ); ?>"
+					value="<?php echo esc_attr( $totals['tax_total'] ); ?>"
 					step="0.01"
 					class="regular-text"
 					readonly
@@ -138,7 +138,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					type="number"
 					id="casben-grand-total"
 					name="grand_total"
-					value="<?php echo esc_attr( $grand_total ); ?>"
+					value="<?php echo esc_attr( $totals['grand_total'] ); ?>"
 					step="0.01"
 					class="regular-text"
 					readonly
