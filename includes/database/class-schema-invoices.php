@@ -49,11 +49,6 @@ class CASBEN_Schema_Invoices {
 
 			notes text NULL,
 
-
-			/*
-			 * FBR Digital Invoice Fields
-			 */
-
 			fbr_invoice_number varchar(100) NULL,
 
 			fbr_status varchar(50) NULL,
@@ -78,8 +73,6 @@ class CASBEN_Schema_Invoices {
 
 
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-		error_log( 'START Invoices dbDelta' );
 		dbDelta( $sql );
-		error_log( 'END Invoices dbDelta' );
 		}
 }

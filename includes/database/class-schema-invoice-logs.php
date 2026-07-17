@@ -64,8 +64,7 @@ class CASBEN_Schema_Invoice_Logs {
 			KEY created_at_idx (created_at)
 
 		) {$charset_collate};";
-error_log( "===== Invoice Logs SQL START =====" );
-error_log( $sql );
-error_log( "===== Invoice Logs SQL END =====" );	
+
+		dbDelta( $sql );	
 }
 }

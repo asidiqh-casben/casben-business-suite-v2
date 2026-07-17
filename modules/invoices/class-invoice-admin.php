@@ -30,7 +30,7 @@ class CASBEN_Invoice_Admin {
 	 */
 	public function __construct() {
 
-		$this->includes();
+		//$this->includes();
 
 		add_action(
 			'admin_menu',
@@ -56,28 +56,6 @@ class CASBEN_Invoice_Admin {
 	 *
 	 * @return void
 	 */
-	private function includes() {
-
-		$files = array(
-			'class-invoice-list.php',
-			'class-invoice-form.php',
-			'class-invoice-save.php',
-		);
-
-
-		foreach ( $files as $file ) {
-
-			$path = __DIR__ . '/' . $file;
-
-			if ( file_exists( $path ) ) {
-
-				require_once $path;
-
-			}
-
-		}
-
-	}
 
 	/**
 	 * Register invoice menu.

@@ -66,8 +66,6 @@ class CASBEN_Schema_Products {
 
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
-		error_log( 'START Products dbDelta' );
 		dbDelta( $sql );
-		error_log( 'END Products dbDelta' );
 	}
 }

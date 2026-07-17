@@ -110,10 +110,18 @@ class CASBEN_Invoice_Form {
 		);
 
 		/*
-		 * Calculate totals.
-		 */
-		$totals = CASBEN_Invoice_Calculator::calculate(
-			$invoice_items
+ * Initialize default totals.
+ *
+ * Totals will be calculated when the invoice is
+ * saved or updated via JavaScript.
+ */
+		$totals = array(
+			'subtotal'       => 0,
+			'discount_total' => 0,
+			'taxable_total'  => 0,
+			'tax_total'      => 0,
+			'grand_total'    => 0,
+			'items'          => $invoice_items,
 		);
 
 		/*
