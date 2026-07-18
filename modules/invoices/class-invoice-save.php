@@ -42,15 +42,8 @@ class CASBEN_Invoice_Save {
 			'casben_invoice_nonce'
 		);
 
-
 		global $wpdb;
-			'Invoice ID: ' .
-			(
-				isset( $_POST['invoice_id'] )
-					? absint( $_POST['invoice_id'] )
-					: 0
-			)
-		);
+			
 		$invoice_id = isset( $_POST['invoice_id'] )
 		? absint( $_POST['invoice_id'] )
 		: 0;
