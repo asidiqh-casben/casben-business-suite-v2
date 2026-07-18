@@ -44,6 +44,21 @@ class CASBEN_Invoice_Save {
 
 
 		global $wpdb;
+		error_log(
+			'Invoice ID: ' .
+			(
+				isset( $_POST['invoice_id'] )
+					? absint( $_POST['invoice_id'] )
+					: 0
+			)
+		);
+		$invoice_id = isset( $_POST['invoice_id'] )
+		? absint( $_POST['invoice_id'] )
+		: 0;
+
+		$is_edit = $invoice_id > 0;
+
+		$invoice_model = new CASBEN_Invoice();
 
 
 		$invoice_table = $wpdb->prefix . 'casben_invoices';
@@ -103,104 +118,166 @@ class CASBEN_Invoice_Save {
 		 */
 
 			$invoice = array(
-	'discount_type'  => isset( $_POST['discount_type'] )
-		? sanitize_key( wp_unslash( $_POST['discount_type'] ) )
-		: 'fixed',
+				'discount_type'  => isset( $_POST['discount_type'] )
+					? sanitize_key( wp_unslash( $_POST['discount_type'] ) )
+					: 'fixed',
 
-	'discount_value' => isset( $_POST['discount_value'] )
-		? (float) wp_unslash( $_POST['discount_value'] )
-		: 0,
+				'discount_value' => isset( $_POST['discount_value'] )
+					? (float) wp_unslash( $_POST['discount_value'] )
+					: 0,
 
-	'tax_rate'       => isset( $_POST['tax_rate'] )
-		? (float) wp_unslash( $_POST['tax_rate'] )
-		: 18,
+				'tax_rate'       => isset( $_POST['tax_rate'] )
+					? (float) wp_unslash( $_POST['tax_rate'] )
+					: 18,
 
-	'items'          => $items,
-);
+				'items'          => $items,
+			);
 
-$calculator = new CASBEN_Invoice_Calculator();
+		$calculator = new CASBEN_Invoice_Calculator();
 
-$totals = $calculator->calculate( $invoice );
+		$totals = $calculator->calculate( $invoice );
 
-$subtotal        = $totals['subtotal'];
-$discount_amount = $totals['discount_total'];
-$tax_amount      = $totals['tax_total'];
-$grand_total     = $totals['grand_total'];
+		$subtotal        = $totals['subtotal'];
+		$discount_amount = $totals['discount_total'];
+		$tax_amount      = $totals['tax_total'];
+		$grand_total     = $totals['grand_total'];
 
 
 		/*
 		 * Generate invoice number.
 		 */
 
-		/*
- 		* Generate invoice number.
- 		*/
-
-		$invoice_number = CASBEN_Helpers::generate_invoice_number();
-
-
-		/*
-		 * Insert invoice header.
+				/*
+		 * Save invoice header.
 		 */
 
 		$wpdb->query( 'START TRANSACTION' );
 
+		if ( $is_edit ) {
 
-		$result = $wpdb->insert(
+			$result = $wpdb->update(
 
-			$invoice_table,
+				$invoice_table,
 
-			array(
+				array(
 
-				'invoice_number'    => $invoice_number,
+					'customer_id'     => $customer_id,
 
-				'customer_id'       => $customer_id,
+					'invoice_date'    => $invoice_date,
 
-				'invoice_date'      => $invoice_date,
+					'due_date'        => $due_date,
 
-				'due_date'          => $due_date,
+					'status'          => 'draft',
 
-				'status'            => 'draft',
+					'subtotal'        => $subtotal,
 
-				'subtotal'          => $subtotal,
+					'tax_amount'      => $tax_amount,
 
-				'tax_amount'        => $tax_amount,
+					'discount_amount' => $discount_amount,
 
-				'discount_amount'   => $discount_amount,
+					'grand_total'     => $grand_total,
 
-				'grand_total'       => $grand_total,
+					'notes'           => $notes,
 
-				'notes'             => $notes,
+				),
 
-			),
+				array(
 
-			array(
+					'id' => $invoice_id,
 
-				'%s',
+				),
 
-				'%d',
+				array(
 
-				'%s',
+					'%d',
 
-				'%s',
+					'%s',
 
-				'%s',
+					'%s',
 
-				'%f',
+					'%s',
 
-				'%f',
+					'%f',
 
-				'%f',
+					'%f',
 
-				'%f',
+					'%f',
 
-				'%s',
+					'%f',
 
-			)
+					'%s',
 
-		);
+				),
 
+				array(
 
+					'%d',
+
+				)
+
+			);
+
+		} else {
+
+			$invoice_number = CASBEN_Helpers::generate_invoice_number();
+
+			$result = $wpdb->insert(
+
+				$invoice_table,
+
+				array(
+
+					'invoice_number'  => $invoice_number,
+
+					'customer_id'     => $customer_id,
+
+					'invoice_date'    => $invoice_date,
+
+					'due_date'        => $due_date,
+
+					'status'          => 'draft',
+
+					'subtotal'        => $subtotal,
+
+					'tax_amount'      => $tax_amount,
+
+					'discount_amount' => $discount_amount,
+
+					'grand_total'     => $grand_total,
+
+					'notes'           => $notes,
+
+				),
+
+				array(
+
+					'%s',
+
+					'%d',
+
+					'%s',
+
+					'%s',
+
+					'%s',
+
+					'%f',
+
+					'%f',
+
+					'%f',
+
+					'%f',
+
+					'%s',
+
+				)
+
+			);
+
+			$invoice_id = $wpdb->insert_id;
+
+		}
 
 		if ( false === $result ) {
 
@@ -211,14 +288,19 @@ $grand_total     = $totals['grand_total'];
 		}
 
 
-		$invoice_id = $wpdb->insert_id;
-
-
 
 		/*
 		 * Insert invoice items.
 		 */
+		/*
+		 * Remove existing items when editing.
+		 */
 
+		if ( $is_edit ) {
+
+			$invoice_model->delete_items( $invoice_id );
+
+		}
 		foreach ( $items as $item ) {
 
 

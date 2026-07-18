@@ -174,7 +174,27 @@ class CASBEN_Invoice {
 
 		return false !== $result;
 	}
+		/**
+	 * Delete invoice items.
+	 *
+	 * @param int $invoice_id Invoice ID.
+	 *
+	 * @return bool
+	 */
+	public function delete_items( $invoice_id ) {
 
+		$result = $this->db->delete(
+			$this->items_table,
+			array(
+				'invoice_id' => absint( $invoice_id ),
+			),
+			array(
+				'%d',
+			)
+		);
+
+		return false !== $result;
+	}
 
 	/**
 	 * Delete invoice and invoice items.
