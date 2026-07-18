@@ -44,7 +44,6 @@ class CASBEN_Invoice_Save {
 
 
 		global $wpdb;
-		error_log(
 			'Invoice ID: ' .
 			(
 				isset( $_POST['invoice_id'] )
@@ -322,7 +321,13 @@ class CASBEN_Invoice_Save {
 			$unit_price = isset( $item['unit_price'] )
 				? floatval( $item['unit_price'] )
 				: 0;
+				/*
+				* Skip completely empty invoice rows. 18-7-2026
+				*/
 
+				if ( empty( $product_id ) ) {
+					continue;
+				}
 
 			$discount = isset( $item['discount_amount'] )
 				? floatval( $item['discount_amount'] )

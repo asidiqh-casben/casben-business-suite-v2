@@ -75,19 +75,27 @@ class CASBEN_Admin_Menu {
 
 
 		/*
-		 * Invoices
-		 */
-		$invoice_admin = new CASBEN_Invoice_Admin();
-
+		* Invoices
+		*/
+				error_log(
+			'Invoice admin object: ' .
+			(
+				isset( $GLOBALS['casben_invoice_admin'] )
+					? get_class( $GLOBALS['casben_invoice_admin'] )
+					: 'NOT FOUND'
+			)
+		);
 		add_submenu_page(
 			'casben-business-suite',
 			__( 'Invoices', 'casben-business-suite' ),
 			__( 'Invoices', 'casben-business-suite' ),
 			'manage_options',
 			'casben-invoices',
-			array( $invoice_admin, 'invoices_page' )
+			array(
+				$GLOBALS['casben_invoice_admin'],
+				'invoices_page'
+			)
 		);
-
 
 		/*
 		 * Settings

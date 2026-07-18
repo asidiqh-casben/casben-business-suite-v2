@@ -95,7 +95,7 @@ class CASBEN_Invoice_Admin {
 			: 'list';
 
 
-		switch ( $action ) {
+				switch ( $action ) {
 
 			case 'add':
 
@@ -107,6 +107,13 @@ class CASBEN_Invoice_Admin {
 			case 'edit':
 
 				$this->render_form();
+
+				break;
+
+
+			case 'delete':
+
+				$this->delete_invoice_action();
 
 				break;
 
@@ -251,6 +258,7 @@ class CASBEN_Invoice_Admin {
 	 */
 	public function handle_actions() {
 
+
 		if ( ! is_admin() ) {
 			return;
 		}
@@ -290,17 +298,29 @@ class CASBEN_Invoice_Admin {
 			wp_unslash( $_GET['id'] )
 		);
 
+$nonce = isset( $_GET['_wpnonce'] )
+    ? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) )
+    : '';
 
 		if ( ! $invoice_id ) {
 			return;
 		}
 
+if ( ! isset( $_GET['_wpnonce'] ) ) {
+    
+    return;
+}
 
-		check_admin_referer(
-			'delete_invoice_' . $invoice_id
-		);
+$nonce = sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) );
 
+$result = wp_verify_nonce(
+    $nonce,
+    'delete_invoice_' . $invoice_id
+);
 
+if ( false === $result ) {
+    wp_die( 'Nonce verification failed.' );
+}
 		$this->delete_invoice(
 			$invoice_id
 		);
@@ -354,9 +374,17 @@ class CASBEN_Invoice_Admin {
 				'%d',
 			)
 		);
+$items_deleted = $wpdb->delete(
+    $items_table,
+    array(
+        'invoice_id' => $invoice_id,
+    ),
+    array(
+        '%d',
+    )
+);
 
-
-		$wpdb->delete(
+		$invoice_deleted = $wpdb->delete(
 			$invoice_table,
 			array(
 				'id' => $invoice_id,

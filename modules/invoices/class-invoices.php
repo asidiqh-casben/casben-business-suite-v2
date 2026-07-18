@@ -33,6 +33,7 @@ class CASBEN_Invoices {
 		$this->includes();
 
 		$this->admin = new CASBEN_Invoice_Admin();
+		$GLOBALS['casben_invoice_admin'] = $this->admin;
 		$this->save  = new CASBEN_Invoice_Save();
 	}
 

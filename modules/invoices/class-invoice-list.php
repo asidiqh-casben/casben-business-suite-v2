@@ -194,12 +194,7 @@ class CASBEN_Invoice_List extends WP_List_Table {
 				esc_url( $edit_url ),
 				esc_html__( 'Edit', 'casben-business-suite' )
 			),
-			'delete' => sprintf(
-				'<a href="%s" onclick="return confirm(\'%s\');">%s</a>',
-				esc_url( $delete_url ),
-				esc_js( __( 'Are you sure you want to delete this invoice?', 'casben-business-suite' ) ),
-				esc_html__( 'Delete', 'casben-business-suite' )
-			),
+			'delete' => '<a href="' . $delete_url . '">Delete</a>',
 		);
 
 		return sprintf(
@@ -257,33 +252,44 @@ class CASBEN_Invoice_List extends WP_List_Table {
 	 */
 	public function process_bulk_action() {
 
-		$action = $this->current_action();
+
+				$action = '';
+
+		if ( isset( $_REQUEST['action'] ) ) {
+
+			$action = sanitize_text_field( wp_unslash( $_REQUEST['action'] ) );
+
+		}
+
 
 		if ( 'delete' !== $action ) {
+
 			return;
+
 		}
 
 		/*
 		 * Single delete.
 		 */
-		if ( isset( $_GET['id'] ) ) {
+//		if ( isset( $_REQUEST['id'] ) ) {
+//
+//			$invoice_id = absint( wp_unslash( $_REQUEST['id'] ) );
+//
 
-			$invoice_id = absint( wp_unslash( $_GET['id'] ) );
+//			check_admin_referer(
+//				'delete_invoice_' . $invoice_id
+//			);
 
-			check_admin_referer(
-				'delete_invoice_' . $invoice_id
-			);
+//			$this->delete_invoice( $invoice_id );
 
-			$this->delete_invoice( $invoice_id );
+//			wp_safe_redirect(
+//				remove_query_arg(
+//					array( 'action', 'id', '_wpnonce' )
+//				)
+//			);
 
-			wp_safe_redirect(
-				remove_query_arg(
-					array( 'action', 'id', '_wpnonce' )
-				)
-			);
-
-			exit;
-		}
+//			exit;
+//		}
 
 		/*
 		 * Bulk delete.
