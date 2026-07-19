@@ -53,10 +53,11 @@ class CASBEN_Btn {
 		$permission = '',
 		$confirm = '',
 		$target = '_self',
-		$visible = true
+		$visible = true,
+		$onclick = ''
 	) {
 
-		return array(
+				return array(
 			'label'      => $label,
 			'icon'       => $icon,
 			'url'        => $url,
@@ -65,25 +66,37 @@ class CASBEN_Btn {
 			'confirm'    => $confirm,
 			'target'     => $target,
 			'visible'    => $visible,
+			'onclick'    => $onclick,
 		);
 	}
 
 	/**
-	 * Add button.
-	 */
-	public static function add( $module, $url ) {
+ * Add/New button.
+ *
+ * @param string $module Module name.
+ * @param string $url    Button URL.
+ * @param string $verb   Button verb (Add/New).
+ *
+ * @return array
+ */
+	public static function add(
+		$module,
+		$url,
+		$verb = 'Add'
+	) {
 
 		return self::make(
 			sprintf(
-				__( 'Add %s', 'casben-business-suite' ),
+				__( '%1$s %2$s', 'casben-business-suite' ),
+				$verb,
 				$module
 			),
 			'plus',
 			$url,
 			self::PRIMARY
 		);
-	}
 
+	}
 			/**
 		 * View button.
 		 */
@@ -185,6 +198,78 @@ class CASBEN_Btn {
 			$url,
 			self::SECONDARY
 		);
+	}
+
+		/**
+	 * Back button.
+	 */
+	public static function back( $url ) {
+
+		return self::make(
+			__( 'Back', 'casben-business-suite' ),
+			'arrow-left-alt',
+			$url,
+			self::SECONDARY
+		);
+
+	}
+
+	/**
+	 * Edit button.
+	 */
+	public static function edit( $url ) {
+
+		return self::make(
+			__( 'Edit', 'casben-business-suite' ),
+			'edit',
+			$url,
+			self::SECONDARY
+		);
+
+	}
+
+	/**
+	 * Delete button.
+	 */
+	public static function delete( $url, $confirm = '' ) {
+
+		if ( empty( $confirm ) ) {
+
+			$confirm = __(
+				'Are you sure you want to delete this item?',
+				'casben-business-suite'
+			);
+
+		}
+
+		return self::make(
+			__( 'Delete', 'casben-business-suite' ),
+			'trash',
+			$url,
+			self::DANGER,
+			'',
+			$confirm
+		);
+
+	}
+
+	/**
+	 * Print document button.
+	 */
+	public static function print_document() {
+
+		return self::make(
+			__( 'Print', 'casben-business-suite' ),
+			'printer',
+			'#',
+			self::SECONDARY,
+			'',
+			'',
+			'_self',
+			true,
+			'window.print(); return false;'
+		);
+
 	}
 
 	/**

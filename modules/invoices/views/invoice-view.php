@@ -353,58 +353,42 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<hr>
 
 
-		<!-- Actions -->
+		<?php
 
+			CASBEN_UI::page_toolbar(
+				array(
+					'actions' => array(
 
-		<p class="casben-invoice-buttons">
-
-			<a class="button"
-				href="<?php echo esc_url(
-					admin_url(
-						'admin.php?page=casben-invoices'
-					)
-				); ?>">
-				
-				<?php esc_html_e(
-					'Back',
-					'casben-business-suite'
-				); ?>
-
-			</a>
-
-
-
-			<a class="button button-primary"
-				href="<?php echo esc_url(
-					add_query_arg(
-						array(
-							'page'   => 'casben-invoices',
-							'action' => 'edit',
-							'id'     => $invoice_data->id,
+						CASBEN_Btn::back(
+							admin_url(
+								'admin.php?page=casben-invoices'
+							)
 						),
-						admin_url( 'admin.php' )
-					)
-				); ?>">
 
-				<?php esc_html_e(
-					'Edit Invoice',
-					'casben-business-suite'
-				); ?>
+						CASBEN_Btn::edit(
+							add_query_arg(
+								array(
+									'page'   => 'casben-invoices',
+									'action' => 'edit',
+									'id'     => $invoice_data->id,
+								),
+								admin_url( 'admin.php' )
+							)
+						),
 
-			</a>
+						CASBEN_Btn::print_document(),
 
+						CASBEN_Btn::dashboard(
+							admin_url(
+								'admin.php?page=casben-business-suite'
+							)
+						),
 
+					),
+				)
+			);
 
-			<button class="button" onclick="window.print(); return false;">
-
-				<?php esc_html_e(
-					'Print Invoice',
-					'casben-business-suite'
-				); ?>
-
-			</button>
-
-		</p>
+			?>
 
 
 	</div>
@@ -475,15 +459,15 @@ if ( ! defined( 'ABSPATH' ) ) {
     }
 
     /* 3. Hide all other WordPress admin elements completely from DOM layout */
-    #adminmenuwrap, 
-    #adminmenuback, 
-    #wpadminbar, 
-    #wpfooter, 
-    .casben-invoice-buttons, 
-    .button, 
-    .page-title-action {
-        display: none !important;
-    }
+    #adminmenuwrap,
+	#adminmenuback,
+	#wpadminbar,
+	#wpfooter,
+	.casben-page-toolbar,
+	.button,
+	.page-title-action {
+		display: none !important;
+	}
 
     /* Alternative approach to 'visibility': Hide immediate siblings of the container if needed.
        However, resetting #wpwrap above usually strips the 2-inch left gap completely. */

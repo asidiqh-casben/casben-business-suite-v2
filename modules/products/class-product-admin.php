@@ -56,18 +56,7 @@ class CASBEN_Product_Admin {
 
 		<div class="wrap">
 
-			<h1 class="wp-heading-inline">
-				<?php esc_html_e( 'Products', 'casben-business-suite' ); ?>
-			</h1>
-
-			<?php if ( empty( $action ) ) : ?>
-
-				<a href="<?php echo esc_url( admin_url( 'admin.php?page=casben-products&action=add' ) ); ?>" class="page-title-action">
-					<?php esc_html_e( 'Add New', 'casben-business-suite' ); ?>
-				</a>
-
-			<?php endif; ?>
-
+						
 			<hr class="wp-header-end">
 
 			<?php
@@ -173,6 +162,35 @@ class CASBEN_Product_Admin {
 				$list_table->prepare_items();
 		
 				?>
+							<?php
+
+		CASBEN_UI::page_toolbar(
+			array(
+				'title'       => __( 'Products', 'casben-business-suite' ),
+				'description' => __( 'Manage your product records.', 'casben-business-suite' ),
+
+				'actions' => array(
+
+					CASBEN_Btn::add(
+						__( 'Products', 'casben-business-suite' ),
+						admin_url( 'admin.php?page=casben-products&action=add' )
+					),
+
+					CASBEN_Btn::print_list( '#' ),
+
+					CASBEN_Btn::export( '#' ),
+
+					CASBEN_Btn::import( '#' ),
+
+					CASBEN_Btn::dashboard(
+						admin_url( 'admin.php?page=casben-business-suite' )
+					),
+
+				),
+			)
+		);
+
+		?>
 
 				<form method="post">
 

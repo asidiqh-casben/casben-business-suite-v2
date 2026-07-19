@@ -83,6 +83,7 @@ class CASBEN_UI {
 					'confirm'    => '',
 					'visible'    => true,
 					'permission' => '',
+					'onclick' => '',
 				)
 			);
 
@@ -104,9 +105,18 @@ class CASBEN_UI {
 				href="<?php echo esc_url( $button['url'] ); ?>"
 				class="<?php echo esc_attr( $button['class'] ); ?>"
 				target="<?php echo esc_attr( $button['target'] ); ?>"
-				<?php if ( ! empty( $button['confirm'] ) ) : ?>
+
+				<?php
+				if ( ! empty( $button['confirm'] ) ) :
+				?>
 					onclick="return confirm('<?php echo esc_js( $button['confirm'] ); ?>');"
-				<?php endif; ?>
+				<?php
+				elseif ( ! empty( $button['onclick'] ) ) :
+				?>
+					onclick="<?php echo esc_attr( $button['onclick'] ); ?>"
+				<?php
+				endif;
+				?>
 			>
 
 				<?php if ( ! empty( $button['icon'] ) ) : ?>

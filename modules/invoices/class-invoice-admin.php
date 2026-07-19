@@ -16,49 +16,28 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class CASBEN_Invoice_Admin {
 
-
-	/**
-	 * Invoice model.
-	 *
-	 * @var CASBEN_Invoice
-	 */
-	private $invoice;
-
-
 	/**
 	 * Constructor.
 	 */
-		public function __construct() {
+	public function __construct() {
 
-			error_log(
-    		'Invoice Admin constructor fired'
-			);
-
-    		add_action(
-        		'admin_init',
-        	array(
-            	$this,
-            	'handle_actions',
-        	)
-    	);
-				error_log(
-			'Hook priority = ' .
-			has_action(
-				'admin_init',
-				array( $this, 'handle_actions' )
+		add_action(
+			'admin_init',
+			array(
+				$this,
+				'handle_actions',
 			)
 		);
 
-
+		add_action(
+			'admin_notices',
+			array(
+				$this,
+				'admin_notices',
+			)
+		);
 
 	}
-
-
-	/**
-	 * Include required files.
-	 *
-	 * @return void
-	 */
 
 	/**
 	 * Register invoice menu.
@@ -81,26 +60,25 @@ class CASBEN_Invoice_Admin {
 
 	}
 
-
 	/**
 	 * Invoice admin page.
 	 *
-	 * Handles list, add, and edit views.
+	 * Handles list, add, edit and view pages.
 	 *
 	 * @return void
 	 */
 	public function invoices_page() {
-		error_log( '>>> invoices_page() called' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
+
 			wp_die(
 				esc_html__(
 					'You do not have permission to access invoices.',
 					'casben-business-suite'
 				)
 			);
-		}
 
+		}
 
 		$action = isset( $_GET['action'] )
 			? sanitize_key(
@@ -108,29 +86,20 @@ class CASBEN_Invoice_Admin {
 			)
 			: 'list';
 
+		switch ( $action ) {
 
-	switch ( $action ) {
+			case 'add':
+			case 'edit':
+				$this->render_form();
+				break;
 
-	case 'view':
+			case 'view':
+				$this->render_view();
+				break;
 
-		$this->render_view();
-
-		break;
-
-
-	case 'edit':
-
-		$this->render_form();
-
-		break;
-
-
-	default:
-
-		$this->render_list();
-
-		break;
-
+			default:
+				$this->render_list();
+				break;
 
 		}
 
@@ -155,8 +124,8 @@ class CASBEN_Invoice_Admin {
 			echo '</p></div>';
 
 			return;
-		}
 
+		}
 
 		$list_table = new CASBEN_Invoice_List();
 
@@ -164,35 +133,38 @@ class CASBEN_Invoice_Admin {
 
 		?>
 
-		<div class="wrap">
+				<div class="wrap">
 
-			<h1 class="wp-heading-inline">
-				<?php esc_html_e(
-					'Invoices',
-					'casben-business-suite'
-				); ?>
-			</h1>
-
-			<a href="<?php echo esc_url(
-				add_query_arg(
-					array(
-						'page'   => 'casben-invoices',
-						'action' => 'add',
+			<?php
+			CASBEN_UI::page_toolbar(
+				array(
+					'title'       => __( 'Invoices', 'casben-business-suite' ),
+					'description' => __(
+						'Manage your invoices.',
+						'casben-business-suite'
 					),
-					admin_url( 'admin.php' )
+					'actions'     => array(
+
+						CASBEN_Btn::add(
+							'Invoice',
+							$this->get_invoice_url( 'add' ),
+							'New'
+						),
+
+						CASBEN_Btn::print_list( '#' ),
+
+						CASBEN_Btn::export( '#' ),
+
+						CASBEN_Btn::dashboard(
+							admin_url(
+								'admin.php?page=casben-business-suite'
+							)
+						),
+
+					),
 				)
-			); ?>" class="page-title-action">
-
-				<?php esc_html_e(
-					'Add New',
-					'casben-business-suite'
-				); ?>
-
-			</a>
-
-
-			<hr class="wp-header-end">
-
+			);
+			?>
 
 			<form method="post">
 
@@ -203,7 +175,6 @@ class CASBEN_Invoice_Admin {
 					'search_invoice'
 				);
 
-
 				$list_table->display();
 
 				?>
@@ -211,13 +182,10 @@ class CASBEN_Invoice_Admin {
 			</form>
 
 		</div>
-
 		<?php
 
 	}
-
-
-	/**
+		/**
 	 * Render invoice form.
 	 *
 	 * @return void
@@ -239,71 +207,59 @@ class CASBEN_Invoice_Admin {
 
 		}
 
-
-		$invoice_id = 0;
-
-
-		if ( isset( $_GET['id'] ) ) {
-
-			$invoice_id = absint(
+		$invoice_id = isset( $_GET['id'] )
+			? absint(
 				wp_unslash( $_GET['id'] )
-			);
-
-		}
-
+			)
+			: 0;
 
 		CASBEN_Invoice_Form::render(
 			$invoice_id
 		);
 
 	}
+
 	/**
 	 * Handle invoice actions.
 	 *
-	 * Handles delete requests before page rendering.
+	 * Currently handles invoice deletion.
 	 *
 	 * @return void
 	 */
 	public function handle_actions() {
-				error_log( '==========================' );
-error_log( 'handle_actions START' );
-error_log( print_r( $_GET, true ) );
 
 		if ( ! is_admin() ) {
 			return;
 		}
 
-
 		if ( empty( $_GET['page'] ) ) {
 			return;
 		}
-
 
 		$page = sanitize_key(
 			wp_unslash( $_GET['page'] )
 		);
 
-
 		if ( 'casben-invoices' !== $page ) {
 			return;
 		}
 
-
-		if (
-			empty( $_GET['action'] ) ||
-			'delete' !== sanitize_key(
-				wp_unslash( $_GET['action'] )
-			)
-		) {
+		if ( empty( $_GET['action'] ) ) {
 			return;
 		}
 
+		$action = sanitize_key(
+			wp_unslash( $_GET['action'] )
+		);
+
+		if ( 'delete' !== $action ) {
+			return;
+		}
 
 		if ( empty( $_GET['id'] ) ) {
 			return;
 		}
 
-				error_log( '2 - handle_actions entered' );
 		$invoice_id = absint(
 			wp_unslash( $_GET['id'] )
 		);
@@ -312,31 +268,33 @@ error_log( print_r( $_GET, true ) );
 			return;
 		}
 
-		if ( ! isset( $_GET['_wpnonce'] ) ) {
-			
+		if ( empty( $_GET['_wpnonce'] ) ) {
 			return;
 		}
 
-		$nonce = sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) );
-				error_log( '3 - action is delete' );
-				error_log( 'About to verify nonce' );
-			error_log( 'Invoice ID = ' . $invoice_id );
-			error_log( 'Nonce = ' . $nonce );
-
-		$result = wp_verify_nonce(
-			$nonce,
-			'delete_invoice_' . $invoice_id
+		$nonce = sanitize_text_field(
+			wp_unslash( $_GET['_wpnonce'] )
 		);
-		error_log( 'Nonce result = ' . var_export( $result, true ) );
 
-		if ( false === $result ) {
-			wp_die( 'Nonce verification failed.' );
+		if (
+			! wp_verify_nonce(
+				$nonce,
+				'delete_invoice_' . $invoice_id
+			)
+		) {
+
+			wp_die(
+				esc_html__(
+					'Security check failed.',
+					'casben-business-suite'
+				)
+			);
+
 		}
-				error_log( '4 - about to verify nonce' );
-				$this->delete_invoice(
-					$invoice_id
-				);
 
+		$this->delete_invoice(
+			$invoice_id
+		);
 
 		wp_safe_redirect(
 			add_query_arg(
@@ -351,47 +309,43 @@ error_log( print_r( $_GET, true ) );
 		exit;
 
 	}
-
-
-	/**
+		/**
 	 * Delete invoice.
 	 *
+	 * Deletes the invoice items first, then the invoice.
+	 *
 	 * @param int $invoice_id Invoice ID.
-	 * @return void
+	 * @return bool True on success, false on failure.
 	 */
-				/**
- * Handle single invoice deletion.
- *
- * @return void
- */
 	private function delete_invoice( $invoice_id ) {
 
 		global $wpdb;
 
-
 		$invoice_id = absint( $invoice_id );
 
-
 		if ( ! $invoice_id ) {
-			return;
+			return false;
 		}
 
-
 		$invoice_table = $wpdb->prefix . 'casben_invoices';
+		$items_table   = $wpdb->prefix . 'casben_invoice_items';
 
-		$items_table = $wpdb->prefix . 'casben_invoice_items';
+		// Delete invoice items.
+		$items_deleted = $wpdb->delete(
+			$items_table,
+			array(
+				'invoice_id' => $invoice_id,
+			),
+			array(
+				'%d',
+			)
+		);
 
+		if ( false === $items_deleted ) {
+			return false;
+		}
 
-$items_deleted = $wpdb->delete(
-    $items_table,
-    array(
-        'invoice_id' => $invoice_id,
-    ),
-    array(
-        '%d',
-    )
-);
-
+		// Delete invoice.
 		$invoice_deleted = $wpdb->delete(
 			$invoice_table,
 			array(
@@ -402,8 +356,13 @@ $items_deleted = $wpdb->delete(
 			)
 		);
 
-	}
+		if ( false === $invoice_deleted ) {
+			return false;
+		}
 
+		return true;
+
+	}
 
 	/**
 	 * Display admin notices.
@@ -413,33 +372,48 @@ $items_deleted = $wpdb->delete(
 	public function admin_notices() {
 
 		if (
-			isset( $_GET['deleted'] ) &&
-			1 === absint( $_GET['deleted'] )
+			! isset( $_GET['page'] ) ||
+			'casben-invoices' !== sanitize_key(
+				wp_unslash( $_GET['page'] )
+			)
 		) {
+			return;
+		}
 
+		if (
+			isset( $_GET['deleted'] ) &&
+			1 === absint(
+				wp_unslash( $_GET['deleted'] )
+			)
+		) {
 			?>
+
 			<div class="notice notice-success is-dismissible">
 
 				<p>
-					<?php esc_html_e(
+
+					<?php
+					esc_html_e(
 						'Invoice deleted successfully.',
 						'casben-business-suite'
-					); ?>
+					);
+					?>
+
 				</p>
 
 			</div>
-			<?php
 
+			<?php
 		}
 
 	}
-	/**
-	 * Get invoice URL.
+		/**
+	 * Get invoice admin URL.
 	 *
 	 * Helper method for generating invoice admin URLs.
 	 *
 	 * @param string $action Action name.
-	 * @param int    $id Invoice ID.
+	 * @param int    $id     Invoice ID.
 	 * @return string
 	 */
 	private function get_invoice_url( $action = '', $id = 0 ) {
@@ -448,13 +422,11 @@ $items_deleted = $wpdb->delete(
 			'page' => 'casben-invoices',
 		);
 
-
 		if ( ! empty( $action ) ) {
 
 			$args['action'] = sanitize_key( $action );
 
 		}
-
 
 		if ( $id > 0 ) {
 
@@ -462,65 +434,60 @@ $items_deleted = $wpdb->delete(
 
 		}
 
-
 		return add_query_arg(
 			$args,
 			admin_url( 'admin.php' )
 		);
 
 	}
-/**
- * Render invoice view page.
- *
- * @return void
- */
-private function render_view() {
+		/**
+	 * Render invoice view page.
+	 *
+	 * @return void
+	 */
+	private function render_view() {
 
-	$invoice_id = isset( $_GET['id'] )
-		? absint( wp_unslash( $_GET['id'] ) )
-		: 0;
-
-
-	if ( ! $invoice_id ) {
-
-		wp_die(
-			esc_html__(
-				'Invalid invoice.',
-				'casben-business-suite'
+		$invoice_id = isset( $_GET['id'] )
+			? absint(
+				wp_unslash( $_GET['id'] )
 			)
+			: 0;
+
+		if ( ! $invoice_id ) {
+
+			wp_die(
+				esc_html__(
+					'Invalid invoice.',
+					'casben-business-suite'
+				)
+			);
+
+		}
+
+		$invoice = new CASBEN_Invoice();
+
+		$invoice_data = $invoice->get(
+			$invoice_id
 		);
 
-	}
+		if ( ! $invoice_data ) {
 
+			wp_die(
+				esc_html__(
+					'Invoice not found.',
+					'casben-business-suite'
+				)
+			);
 
-	$invoice = new CASBEN_Invoice();
+		}
 
-
-	$invoice_data = $invoice->get(
-		$invoice_id
-	);
-
-
-	if ( ! $invoice_data ) {
-
-		wp_die(
-			esc_html__(
-				'Invoice not found.',
-				'casben-business-suite'
-			)
+		$items = $invoice->get_items(
+			$invoice_id
 		);
 
-	}
-
-
-	$items = $invoice->get_items(
-		$invoice_id
-	);
-
-
-	include CASBEN_PLUGIN_DIR . 'modules/invoices/views/invoice-view.php';
+		include CASBEN_PLUGIN_DIR .
+			'modules/invoices/views/invoice-view.php';
 
 	}
+
 }
-
-
