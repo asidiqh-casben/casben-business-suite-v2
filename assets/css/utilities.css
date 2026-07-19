@@ -1,0 +1,207 @@
+/**
+ * CASBEN Business Suite
+ * Utility Classes
+ *
+ * @package CASBEN_Business_Suite
+ */
+
+/*==============================================================
+TEXT ALIGNMENT
+==============================================================*/
+
+.casben-text-left {
+    text-align: left;
+}
+
+.casben-text-center {
+    text-align: center;
+}
+
+.casben-text-right {
+    text-align: right;
+}
+
+/*==============================================================
+DISPLAY
+==============================================================*/
+
+.casben-hidden {
+    display: none !important;
+}
+
+.casben-block {
+    display: block;
+}
+
+.casben-inline {
+    display: inline;
+}
+
+.casben-inline-block {
+    display: inline-block;
+}
+
+.casben-flex {
+    display: flex;
+}
+
+.casben-flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.casben-flex-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.casben-flex-end {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.casben-flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+/*==============================================================
+WIDTH
+==============================================================*/
+
+.casben-w-25 {
+    width: 25%;
+}
+
+.casben-w-50 {
+    width: 50%;
+}
+
+.casben-w-75 {
+    width: 75%;
+}
+
+.casben-w-100 {
+    width: 100%;
+}
+
+/*==============================================================
+MARGIN
+==============================================================*/
+
+.casben-m-0 { margin:0; }
+
+.casben-mt-5 { margin-top:5px; }
+.casben-mt-10 { margin-top:10px; }
+.casben-mt-15 { margin-top:15px; }
+.casben-mt-20 { margin-top:20px; }
+.casben-mt-30 { margin-top:30px; }
+
+.casben-mb-5 { margin-bottom:5px; }
+.casben-mb-10 { margin-bottom:10px; }
+.casben-mb-15 { margin-bottom:15px; }
+.casben-mb-20 { margin-bottom:20px; }
+.casben-mb-30 { margin-bottom:30px; }
+
+.casben-ml-auto {
+    margin-left: auto;
+}
+
+/*==============================================================
+PADDING
+==============================================================*/
+
+.casben-p-0 { padding:0; }
+
+.casben-p-5 { padding:5px; }
+.casben-p-10 { padding:10px; }
+.casben-p-15 { padding:15px; }
+.casben-p-20 { padding:20px; }
+.casben-p-30 { padding:30px; }
+
+/*==============================================================
+GAP
+==============================================================*/
+
+.casben-gap-5 {
+    gap:5px;
+}
+
+.casben-gap-10 {
+    gap:10px;
+}
+
+.casben-gap-15 {
+    gap:15px;
+}
+
+.casben-gap-20 {
+    gap:20px;
+}
+
+.casben-gap-30 {
+    gap:30px;
+}
+
+/*==============================================================
+FONT WEIGHT
+==============================================================*/
+
+.casben-fw-normal {
+    font-weight:400;
+}
+
+.casben-fw-medium {
+    font-weight:500;
+}
+
+.casben-fw-bold {
+    font-weight:700;
+}
+
+/*==============================================================
+BORDER RADIUS
+==============================================================*/
+
+.casben-rounded {
+    border-radius:var(--casben-radius);
+}
+
+.casben-rounded-lg {
+    border-radius:var(--casben-radius-lg);
+}
+
+/*==============================================================
+SHADOW
+==============================================================*/
+
+.casben-shadow {
+    box-shadow:var(--casben-shadow);
+}
+
+.casben-shadow-lg {
+    box-shadow:var(--casben-shadow-lg);
+}
+
+/*==============================================================
+CURSOR
+==============================================================*/
+
+.casben-pointer {
+    cursor:pointer;
+}
+
+/*==============================================================
+OVERFLOW
+==============================================================*/
+
+.casben-overflow-auto {
+    overflow:auto;
+}
+
+.casben-overflow-hidden {
+    overflow:hidden;
+}

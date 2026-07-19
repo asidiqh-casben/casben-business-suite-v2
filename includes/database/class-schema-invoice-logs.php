@@ -16,55 +16,55 @@ class CASBEN_Schema_Invoice_Logs {
 	 *
 	 * @return void
 	 */
-	public static function create_table() {
+		public static function create_table() {
 
-		global $wpdb;
+			global $wpdb;
 
-		$table_name      = $wpdb->prefix . 'casben_invoice_logs';
-		$charset_collate = $wpdb->get_charset_collate();
+			$table_name      = $wpdb->prefix . 'casben_invoice_logs';
+			$charset_collate = $wpdb->get_charset_collate();
 
-		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
-		$sql = "CREATE TABLE {$table_name} (
+				$sql = "CREATE TABLE {$table_name} (
 
-			id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+				id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
 
-			invoice_id BIGINT(20) UNSIGNED NOT NULL,
+				invoice_id BIGINT(20) UNSIGNED NOT NULL,
 
-			reference_no VARCHAR(100) DEFAULT NULL,
+				reference_no VARCHAR(100) DEFAULT NULL,
 
-			request_type VARCHAR(20) NOT NULL DEFAULT 'SUBMIT',
+				request_type VARCHAR(20) NOT NULL DEFAULT 'SUBMIT',
 
-			request_payload LONGTEXT DEFAULT NULL,
+				request_payload LONGTEXT DEFAULT NULL,
 
-			response_payload LONGTEXT DEFAULT NULL,
+				response_payload LONGTEXT DEFAULT NULL,
 
-			http_status SMALLINT(5) UNSIGNED DEFAULT NULL,
+				http_status SMALLINT(5) UNSIGNED DEFAULT NULL,
 
-			fbr_status VARCHAR(20) NOT NULL DEFAULT 'PENDING',
+				fbr_status VARCHAR(20) NOT NULL DEFAULT 'PENDING',
 
-			error_message TEXT DEFAULT NULL,
+				error_message TEXT DEFAULT NULL,
 
-			attempt_number INT(10) UNSIGNED NOT NULL DEFAULT 1,
+				attempt_number INT(10) UNSIGNED NOT NULL DEFAULT 1,
 
-			created_by BIGINT(20) UNSIGNED DEFAULT NULL,
+				created_by BIGINT(20) UNSIGNED DEFAULT NULL,
 
-			created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+				created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-			PRIMARY KEY (id),
+				PRIMARY KEY (id),
 
-			KEY invoice_id_idx (invoice_id),
+				KEY invoice_id_idx (invoice_id),
 
-			KEY reference_no_idx (reference_no),
+				KEY reference_no_idx (reference_no),
 
-			KEY request_type_idx (request_type),
+				KEY request_type_idx (request_type),
 
-			KEY fbr_status_idx (fbr_status),
+				KEY fbr_status_idx (fbr_status),
 
-			KEY created_at_idx (created_at)
+				KEY created_at_idx (created_at)
 
-		) {$charset_collate};";
+			) {$charset_collate};";
 
-		dbDelta( $sql );	
-}
+			dbDelta( $sql );	
+	}
 }

@@ -20,12 +20,14 @@ class CASBEN_Admin_Menu {
 	 */
 	public static function register_menu() {
 
+		$dashboard_admin = new CASBEN_Dashboard_Admin();
+
 		add_menu_page(
 			__( 'CASBEN Business Suite', 'casben-business-suite' ),
 			__( 'CASBEN Suite', 'casben-business-suite' ),
 			'manage_options',
 			'casben-business-suite',
-			array( __CLASS__, 'dashboard_page' ),
+			array( $dashboard_admin, 'dashboard_page' ),
 			'dashicons-businessman',
 			25
 		);
@@ -40,7 +42,7 @@ class CASBEN_Admin_Menu {
 			__( 'Dashboard', 'casben-business-suite' ),
 			'manage_options',
 			'casben-business-suite',
-			array( __CLASS__, 'dashboard_page' )
+			array( $dashboard_admin, 'dashboard_page' )
 		);
 
 
@@ -117,16 +119,6 @@ class CASBEN_Admin_Menu {
 	 *
 	 * @return void
 	 */
-	public static function dashboard_page() {
-		?>
-
-		<div class="wrap">
-			<h1><?php esc_html_e( 'CASBEN Business Suite', 'casben-business-suite' ); ?></h1>
-			<p><?php esc_html_e( 'Welcome to CASBEN Business Management System.', 'casben-business-suite' ); ?></p>
-		</div>
-
-		<?php
-	}
 
 
 	/**

@@ -14,7 +14,7 @@ class CASBEN_Database_Schema {
 	/**
 	 * Database Version.
 	 */
-	const DB_VERSION = '1.0.2';
+	const DB_VERSION = '1.0.4';
 
 	/**
 	 * Create or update all plugin tables.
@@ -29,6 +29,7 @@ class CASBEN_Database_Schema {
 		require_once CASBEN_PLUGIN_DIR . 'includes/database/class-schema-invoices.php';
 		require_once CASBEN_PLUGIN_DIR . 'includes/database/class-schema-invoice-items.php';
 		require_once CASBEN_PLUGIN_DIR . 'includes/database/class-schema-invoice-logs.php';
+		require_once CASBEN_PLUGIN_DIR . 'includes/database/class-schema-activity-logs.php';
 		require_once CASBEN_PLUGIN_DIR . 'includes/database/class-schema-settings.php';
 
 		// Create tables.
@@ -37,6 +38,7 @@ class CASBEN_Database_Schema {
 		CASBEN_Schema_Invoices::create_table();
 		CASBEN_Schema_Invoice_Items::create_table();
 		CASBEN_Schema_Invoice_Logs::create_table();
+		CASBEN_Schema_Activity_Logs::create_table();
 		CASBEN_Schema_Settings::create_table();
 
 		update_option(

@@ -1,0 +1,80 @@
+/**
+ * CASBEN Business Suite
+ * Alert Styles
+ *
+ * @package CASBEN_Business_Suite
+ */
+
+/*--------------------------------------------------------------
+# Base Alert
+--------------------------------------------------------------*/
+
+.casben-alert {
+
+    padding: 14px 18px;
+
+    border-radius: var(--casben-radius);
+
+    margin-bottom: 20px;
+
+    border-left: 4px solid;
+
+    font-size: 14px;
+
+}
+
+/*--------------------------------------------------------------
+# Success
+--------------------------------------------------------------*/
+
+.casben-alert-success {
+
+    background: #edf9f0;
+
+    color: #146c2e;
+
+    border-color: var(--casben-success);
+
+}
+
+/*--------------------------------------------------------------
+# Danger
+--------------------------------------------------------------*/
+
+.casben-alert-danger {
+
+    background: #fdeeee;
+
+    color: #8a1f1f;
+
+    border-color: var(--casben-danger);
+
+}
+
+/*--------------------------------------------------------------
+# Warning
+--------------------------------------------------------------*/
+
+.casben-alert-warning {
+
+    background: #fff8e5;
+
+    color: #8a6500;
+
+    border-color: var(--casben-warning);
+
+}
+
+/*--------------------------------------------------------------
+# Info
+--------------------------------------------------------------*/
+
+.casben-alert-info {
+
+    background: #eef6fc;
+
+    color: #004d7a;
+
+    border-color: var(--casben-primary);
+
+}

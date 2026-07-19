@@ -1,0 +1,197 @@
+/**
+ * CASBEN Business Suite
+ * Modal Styles
+ *
+ * @package CASBEN_Business_Suite
+ */
+
+/*--------------------------------------------------------------
+# Overlay
+--------------------------------------------------------------*/
+
+.casben-modal-overlay {
+
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(0,0,0,.45);
+
+    display: none;
+
+    justify-content: center;
+
+    align-items: center;
+
+    z-index: 99999;
+
+    padding: 20px;
+
+}
+
+/*--------------------------------------------------------------
+# Active
+--------------------------------------------------------------*/
+
+.casben-modal-overlay.active {
+
+    display: flex;
+
+}
+
+/*--------------------------------------------------------------
+# Modal
+--------------------------------------------------------------*/
+
+.casben-modal {
+
+    width: 100%;
+
+    max-width: 520px;
+
+    background: var(--casben-white);
+
+    border-radius: var(--casben-radius-lg);
+
+    box-shadow: var(--casben-shadow-lg);
+
+    overflow: hidden;
+
+    animation: casbenModal .20s ease;
+
+}
+
+/*--------------------------------------------------------------
+# Animation
+--------------------------------------------------------------*/
+
+@keyframes casbenModal {
+
+    from {
+
+        opacity: 0;
+
+        transform: translateY(-20px);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform: translateY(0);
+
+    }
+
+}
+
+/*--------------------------------------------------------------
+# Header
+--------------------------------------------------------------*/
+
+.casben-modal-header {
+
+    padding: 18px 22px;
+
+    border-bottom: 1px solid var(--casben-border);
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+}
+
+.casben-modal-title {
+
+    margin: 0;
+
+    font-size: 18px;
+
+    font-weight: 600;
+
+    color: var(--casben-text);
+
+}
+
+/*--------------------------------------------------------------
+# Close Button
+--------------------------------------------------------------*/
+
+.casben-modal-close {
+
+    border: none;
+
+    background: none;
+
+    cursor: pointer;
+
+    font-size: 24px;
+
+    line-height: 1;
+
+    color: var(--casben-text-light);
+
+}
+
+.casben-modal-close:hover {
+
+    color: var(--casben-danger);
+
+}
+
+/*--------------------------------------------------------------
+# Body
+--------------------------------------------------------------*/
+
+.casben-modal-body {
+
+    padding: 22px;
+
+    color: var(--casben-text);
+
+    line-height: 1.7;
+
+}
+
+/*--------------------------------------------------------------
+# Footer
+--------------------------------------------------------------*/
+
+.casben-modal-footer {
+
+    padding: 18px 22px;
+
+    border-top: 1px solid var(--casben-border);
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+}
+
+/*--------------------------------------------------------------
+# Responsive
+--------------------------------------------------------------*/
+
+@media (max-width:768px){
+
+    .casben-modal{
+
+        max-width:100%;
+    }
+
+    .casben-modal-footer{
+
+        flex-direction:column;
+    }
+
+    .casben-modal-footer .casben-btn{
+
+        width:100%;
+    }
+
+}

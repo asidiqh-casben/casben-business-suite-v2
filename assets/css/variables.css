@@ -1,0 +1,80 @@
+/**
+ * CASBEN Business Suite
+ * CSS Variables
+ *
+ * @package CASBEN_Business_Suite
+ */
+
+:root {
+
+    /*--------------------------------------------------------------
+    # Brand Colors
+    --------------------------------------------------------------*/
+
+    --casben-primary: #2271b1;
+    --casben-primary-hover: #135e96;
+
+    --casben-success: #00a32a;
+    --casben-success-hover: #008a20;
+
+    --casben-danger: #d63638;
+    --casben-danger-hover: #b32d2e;
+
+    --casben-warning: #dba617;
+    --casben-warning-hover: #c08d08;
+
+    /*--------------------------------------------------------------
+    # Neutral Colors
+    --------------------------------------------------------------*/
+
+    --casben-white: #ffffff;
+
+    --casben-bg: #f6f7f7;
+
+    --casben-border: #dcdcde;
+
+    --casben-border-light: #ececec;
+
+    --casben-text: #1d2327;
+
+    --casben-text-light: #646970;
+
+    /*--------------------------------------------------------------
+    # Border Radius
+    --------------------------------------------------------------*/
+
+    --casben-radius-sm: 4px;
+    --casben-radius: 6px;
+    --casben-radius-lg: 10px;
+
+    /*--------------------------------------------------------------
+    # Shadows
+    --------------------------------------------------------------*/
+
+    --casben-shadow-sm:
+        0 1px 3px rgba(0,0,0,.05);
+
+    --casben-shadow:
+        0 2px 5px rgba(0,0,0,.08);
+
+    --casben-shadow-lg:
+        0 6px 18px rgba(0,0,0,.12);
+
+    /*--------------------------------------------------------------
+    # Animation
+    --------------------------------------------------------------*/
+
+    --casben-transition:
+        all .20s ease;
+
+    /*--------------------------------------------------------------
+    # Spacing
+    --------------------------------------------------------------*/
+
+    --casben-space-xs: 5px;
+    --casben-space-sm: 10px;
+    --casben-space-md: 20px;
+    --casben-space-lg: 30px;
+    --casben-space-xl: 40px;
+
+}

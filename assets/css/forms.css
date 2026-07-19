@@ -1,0 +1,259 @@
+/**
+ * CASBEN Business Suite
+ * Form Styles
+ *
+ * @package CASBEN_Business_Suite
+ */
+
+/*--------------------------------------------------------------
+# Form Wrapper
+--------------------------------------------------------------*/
+
+.casben-form {
+    width: 100%;
+}
+
+/*--------------------------------------------------------------
+# Form Rows
+--------------------------------------------------------------*/
+
+.casben-form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.casben-form-group {
+    flex: 1;
+    min-width: 250px;
+}
+
+/*--------------------------------------------------------------
+# Labels
+--------------------------------------------------------------*/
+
+.casben-form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #1d2327;
+}
+
+/*--------------------------------------------------------------
+# Inputs
+--------------------------------------------------------------*/
+
+.casben-input,
+.casben-select,
+.casben-textarea {
+    width: 100%;
+    padding: 10px 12px;
+
+    border: 1px solid #c3c4c7;
+    border-radius: 6px;
+
+    background: #fff;
+    color: #1d2327;
+
+    font-size: 14px;
+    line-height: 1.5;
+
+    box-sizing: border-box;
+
+    transition:
+        border-color .2s ease,
+        box-shadow .2s ease;
+}
+
+/*--------------------------------------------------------------
+# Textarea
+--------------------------------------------------------------*/
+
+.casben-textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+/*--------------------------------------------------------------
+# Select
+--------------------------------------------------------------*/
+
+.casben-select {
+    cursor: pointer;
+}
+
+/*--------------------------------------------------------------
+# Focus
+--------------------------------------------------------------*/
+
+.casben-input:focus,
+.casben-select:focus,
+.casben-textarea:focus {
+
+    border-color: #2271b1;
+
+    box-shadow:
+        0 0 0 1px #2271b1;
+
+    outline: none;
+}
+
+/*--------------------------------------------------------------
+# Readonly
+--------------------------------------------------------------*/
+
+.casben-input[readonly] {
+    background: #f6f7f7;
+}
+
+/*--------------------------------------------------------------
+# Disabled
+--------------------------------------------------------------*/
+
+.casben-input:disabled,
+.casben-select:disabled,
+.casben-textarea:disabled {
+
+    background: #f6f7f7;
+    color: #8c8f94;
+    cursor: not-allowed;
+}
+
+/*--------------------------------------------------------------
+# Help Text
+--------------------------------------------------------------*/
+
+.casben-help {
+
+    margin-top: 6px;
+
+    font-size: 13px;
+
+    color: #646970;
+}
+
+/*--------------------------------------------------------------
+# Required
+--------------------------------------------------------------*/
+
+.casben-required {
+
+    color: #d63638;
+
+    margin-left: 4px;
+}
+
+/*--------------------------------------------------------------
+# Error Text
+--------------------------------------------------------------*/
+
+.casben-error {
+
+    margin-top: 6px;
+
+    color: #d63638;
+
+    font-size: 13px;
+}
+
+/*--------------------------------------------------------------
+# Success Text
+--------------------------------------------------------------*/
+
+.casben-success {
+
+    margin-top: 6px;
+
+    color: #00a32a;
+
+    font-size: 13px;
+}
+
+/*--------------------------------------------------------------
+# Checkbox
+--------------------------------------------------------------*/
+
+.casben-checkbox {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+}
+
+.casben-checkbox input {
+
+    margin: 0;
+}
+
+/*--------------------------------------------------------------
+# Radio
+--------------------------------------------------------------*/
+
+.casben-radio {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+}
+
+/*--------------------------------------------------------------
+# Inline Fields
+--------------------------------------------------------------*/
+
+.casben-inline {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    flex-wrap: wrap;
+}
+
+/*--------------------------------------------------------------
+# Form Actions
+--------------------------------------------------------------*/
+
+.casben-form-actions {
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    margin-top: 30px;
+
+    padding-top: 20px;
+
+    border-top: 1px solid #dcdcde;
+}
+
+/*--------------------------------------------------------------
+# Responsive
+--------------------------------------------------------------*/
+
+@media (max-width:768px){
+
+    .casben-form-row{
+
+        flex-direction:column;
+    }
+
+    .casben-form-actions{
+
+        flex-direction:column;
+    }
+
+    .casben-form-actions .casben-btn{
+
+        width:100%;
+    }
+
+}

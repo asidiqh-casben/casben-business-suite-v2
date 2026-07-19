@@ -1,0 +1,90 @@
+/**
+ * CASBEN Business Suite
+ * Badge Styles
+ *
+ * @package CASBEN_Business_Suite
+ */
+
+/*--------------------------------------------------------------
+# Base Badge
+--------------------------------------------------------------*/
+
+.casben-badge {
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 4px 10px;
+
+    border-radius: 999px;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    line-height: 1.4;
+
+    white-space: nowrap;
+}
+
+/*--------------------------------------------------------------
+# Primary
+--------------------------------------------------------------*/
+
+.casben-badge-primary {
+
+    background: var(--casben-primary);
+    color: var(--casben-white);
+}
+
+/*--------------------------------------------------------------
+# Success
+--------------------------------------------------------------*/
+
+.casben-badge-success {
+
+    background: var(--casben-success);
+    color: var(--casben-white);
+}
+
+/*--------------------------------------------------------------
+# Danger
+--------------------------------------------------------------*/
+
+.casben-badge-danger {
+
+    background: var(--casben-danger);
+    color: var(--casben-white);
+}
+
+/*--------------------------------------------------------------
+# Warning
+--------------------------------------------------------------*/
+
+.casben-badge-warning {
+
+    background: var(--casben-warning);
+    color: var(--casben-white);
+}
+
+/*--------------------------------------------------------------
+# Light
+--------------------------------------------------------------*/
+
+.casben-badge-light {
+
+    background: var(--casben-bg);
+    color: var(--casben-text);
+    border: 1px solid var(--casben-border);
+}
+
+/*--------------------------------------------------------------
+# Outline
+--------------------------------------------------------------*/
+
+.casben-badge-outline {
+
+    background: transparent;
+    border: 1px solid var(--casben-primary);
+    color: var(--casben-primary);
+}

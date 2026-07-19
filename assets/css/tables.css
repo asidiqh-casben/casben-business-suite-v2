@@ -1,0 +1,148 @@
+/**
+ * CASBEN Business Suite
+ * Table Styles
+ *
+ * @package CASBEN_Business_Suite
+ */
+
+/*--------------------------------------------------------------
+# Table Wrapper
+--------------------------------------------------------------*/
+
+.casben-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    background: #fff;
+    border: 1px solid #dcdcde;
+    border-radius: 8px;
+}
+
+/*--------------------------------------------------------------
+# Table
+--------------------------------------------------------------*/
+
+.casben-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+/*--------------------------------------------------------------
+# Header
+--------------------------------------------------------------*/
+
+.casben-table thead {
+    background: #f6f7f7;
+}
+
+.casben-table thead th {
+    padding: 14px 16px;
+    text-align: left;
+    font-size: 13px;
+    font-weight: 600;
+    color: #1d2327;
+    border-bottom: 1px solid #dcdcde;
+    white-space: nowrap;
+}
+
+/*--------------------------------------------------------------
+# Body
+--------------------------------------------------------------*/
+
+.casben-table tbody td {
+    padding: 14px 16px;
+    border-bottom: 1px solid #ececec;
+    vertical-align: middle;
+    color: #1d2327;
+    font-size: 14px;
+}
+
+/*--------------------------------------------------------------
+# Hover
+--------------------------------------------------------------*/
+
+.casben-table tbody tr:hover {
+    background: #f9fbfc;
+}
+
+/*--------------------------------------------------------------
+# Zebra
+--------------------------------------------------------------*/
+
+.casben-table tbody tr:nth-child(even) {
+    background: #fcfcfc;
+}
+
+/*--------------------------------------------------------------
+# Last Row
+--------------------------------------------------------------*/
+
+.casben-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/*--------------------------------------------------------------
+# Number Columns
+--------------------------------------------------------------*/
+
+.casben-text-right {
+    text-align: right;
+}
+
+.casben-text-center {
+    text-align: center;
+}
+
+.casben-text-left {
+    text-align: left;
+}
+
+/*--------------------------------------------------------------
+# Table Actions
+--------------------------------------------------------------*/
+
+.casben-table-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/*--------------------------------------------------------------
+# Action Links
+--------------------------------------------------------------*/
+
+.casben-table-actions a {
+    text-decoration: none;
+    color: #2271b1;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.casben-table-actions a:hover {
+    color: #135e96;
+}
+
+/*--------------------------------------------------------------
+# Empty State
+--------------------------------------------------------------*/
+
+.casben-table-empty {
+    text-align: center;
+    padding: 40px;
+    color: #646970;
+    font-size: 15px;
+}
+
+/*--------------------------------------------------------------
+# Responsive
+--------------------------------------------------------------*/
+
+@media (max-width:768px) {
+
+    .casben-table thead th,
+    .casben-table tbody td {
+        padding: 10px;
+        font-size: 13px;
+    }
+
+}

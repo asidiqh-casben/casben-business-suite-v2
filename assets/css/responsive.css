@@ -1,0 +1,140 @@
+/**
+ * CASBEN Business Suite
+ * Responsive Styles
+ *
+ * @package CASBEN_Business_Suite
+ */
+
+/*==============================================================
+Large Desktop
+==============================================================*/
+
+@media screen and (max-width: 1400px) {
+
+    .casben-wrap {
+        max-width: 1200px;
+    }
+
+}
+
+/*==============================================================
+Laptop
+==============================================================*/
+
+@media screen and (max-width: 1200px) {
+
+    .casben-wrap {
+        padding: 0 15px;
+    }
+
+    .casben-page-title {
+        font-size: 24px;
+    }
+
+}
+
+/*==============================================================
+Tablet
+==============================================================*/
+
+@media screen and (max-width: 992px) {
+
+    .casben-grid-4,
+    .casben-grid-3 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .casben-page-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .casben-btn-group {
+        flex-wrap: wrap;
+    }
+
+}
+
+/*==============================================================
+Mobile
+==============================================================*/
+
+@media screen and (max-width: 768px) {
+
+    .casben-wrap {
+        margin: 15px auto;
+        padding: 0 10px;
+    }
+
+    .casben-grid-2,
+    .casben-grid-3,
+    .casben-grid-4 {
+        grid-template-columns: 1fr;
+    }
+
+    .casben-form-row {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .casben-form-group {
+        min-width: 100%;
+    }
+
+    .casben-btn-group {
+        flex-direction: column;
+    }
+
+    .casben-btn-group .casben-btn {
+        width: 100%;
+    }
+
+    .casben-table-wrapper {
+        overflow-x: auto;
+    }
+
+    .casben-table {
+        min-width: 700px;
+    }
+
+    .casben-card-body,
+    .casben-card-header,
+    .casben-card-footer {
+        padding: 15px;
+    }
+
+    .casben-modal {
+        width: 100%;
+    }
+
+}
+
+/*==============================================================
+Small Mobile
+==============================================================*/
+
+@media screen and (max-width: 480px) {
+
+    .casben-page-title {
+        font-size: 20px;
+    }
+
+    .casben-page-subtitle {
+        font-size: 13px;
+    }
+
+    .casben-stat-value {
+        font-size: 24px;
+    }
+
+    .casben-btn {
+        font-size: 13px;
+        padding: 9px 14px;
+    }
+
+    .casben-table th,
+    .casben-table td {
+        padding: 10px;
+    }
+
+}

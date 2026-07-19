@@ -1,0 +1,294 @@
+/**
+ * CASBEN Business Suite
+ * Layout Styles
+ *
+ * @package CASBEN_Business_Suite
+ */
+
+/* ---------------------------------------------------------
+   Main Wrapper
+--------------------------------------------------------- */
+
+.casben-wrap {
+    max-width: 1400px;
+    margin: 20px auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+/* ---------------------------------------------------------
+   Page Header
+--------------------------------------------------------- */
+
+.casben-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.casben-page-title {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 600;
+    color: #1d2327;
+    line-height: 1.3;
+}
+
+.casben-page-subtitle {
+    margin-top: 6px;
+    color: #646970;
+    font-size: 14px;
+}
+
+/* ---------------------------------------------------------
+   Grid System
+--------------------------------------------------------- */
+
+.casben-grid {
+    display: grid;
+    gap: 20px;
+}
+
+.casben-grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.casben-grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.casben-grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+/* Grid Column Spans */
+
+.casben-grid-span-2 {
+    grid-column: span 2;
+}
+
+.casben-grid-span-3 {
+    grid-column: span 3;
+}
+
+.casben-grid-span-4 {
+    grid-column: span 4;
+}
+
+/* ---------------------------------------------------------
+   Cards
+--------------------------------------------------------- */
+
+.casben-card {
+    background: #ffffff;
+    border: 1px solid #dcdcde;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.05);
+    overflow: hidden;
+}
+
+.casben-card-header {
+    padding: 18px 22px;
+    border-bottom: 1px solid #ececec;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.casben-card-body {
+    padding: 22px;
+}
+
+.casben-card-footer {
+    padding: 18px 22px;
+    border-top: 1px solid #ececec;
+    background: #fafafa;
+}
+
+/* ---------------------------------------------------------
+   Statistics Cards
+--------------------------------------------------------- */
+
+.casben-stat-card {
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 22px;
+    border: 1px solid #dcdcde;
+    box-shadow: 0 2px 5px rgba(0,0,0,.05);
+}
+
+.casben-stat-title {
+    font-size: 14px;
+    color: #646970;
+    margin-bottom: 8px;
+}
+
+.casben-stat-value {
+    font-size: 30px;
+    font-weight: 700;
+    color: #2271b1;
+    line-height: 1;
+}
+
+.casben-stat-footer {
+    margin-top: 10px;
+    font-size: 13px;
+    color: #646970;
+}
+
+/* ---------------------------------------------------------
+   Quick Actions
+--------------------------------------------------------- */
+
+.casben-quick-actions {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 20px;
+}
+
+.casben-quick-action {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 18px;
+	text-decoration: none;
+	border: 1px solid #dcdcde;
+	border-radius: 8px;
+	background: #ffffff;
+	transition: all .2s ease;
+	color: #2271b1;
+}
+
+.casben-quick-action:hover {
+	background: #f6f7f7;
+	border-color: #2271b1;
+}
+
+.casben-quick-action .dashicons {
+	font-size: 28px;
+	width: 28px;
+	height: 28px;
+	margin-bottom: 10px;
+}
+
+.casben-quick-action span:last-child {
+	font-size: 14px;
+	font-weight: 600;
+	color: #1d2327;
+}
+
+/* ---------------------------------------------------------
+   Sections
+--------------------------------------------------------- */
+
+.casben-section {
+    margin-bottom: 30px;
+}
+
+.casben-section-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+/* ---------------------------------------------------------
+   Flex Utilities
+--------------------------------------------------------- */
+
+.casben-flex {
+    display: flex;
+}
+
+.casben-flex-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.casben-flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.casben-flex-end {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.casben-gap-10 {
+    gap: 10px;
+}
+
+.casben-gap-20 {
+    gap: 20px;
+}
+
+/* ---------------------------------------------------------
+   Spacing Utilities
+--------------------------------------------------------- */
+
+.casben-mt-10 { margin-top:10px; }
+.casben-mt-20 { margin-top:20px; }
+.casben-mt-30 { margin-top:30px; }
+
+.casben-mb-10 { margin-bottom:10px; }
+.casben-mb-20 { margin-bottom:20px; }
+.casben-mb-30 { margin-bottom:30px; }
+
+.casben-p-10 { padding:10px; }
+.casben-p-20 { padding:20px; }
+.casben-p-30 { padding:30px; }
+
+/* ---------------------------------------------------------
+   Dashboard
+--------------------------------------------------------- */
+
+.casben-dashboard-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.casben-stat-card {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* ---------------------------------------------------------
+   Responsive
+--------------------------------------------------------- */
+
+@media (max-width: 1024px) {
+
+    .casben-grid-4,
+    .casben-grid-3 {
+        grid-template-columns: repeat(2,1fr);
+    }
+
+}
+
+@media (max-width: 768px) {
+
+        .casben-grid-4,
+        .casben-grid-3,
+        .casben-grid-2 {
+            grid-template-columns: 1fr;
+        }
+
+        .casben-dashboard-row {
+            grid-template-columns: 1fr;
+        }
+
+        .casben-page-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+    }

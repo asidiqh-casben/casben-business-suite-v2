@@ -27,7 +27,6 @@ class CASBEN_Loader {
 		require_once CASBEN_PLUGIN_DIR . 'includes/class-helpers.php';
 		require_once CASBEN_PLUGIN_DIR . 'includes/class-assets.php';
 		require_once CASBEN_PLUGIN_DIR . 'includes/class-admin.php';
-
 		/*
  		* Settings Module
  		*/
@@ -61,7 +60,19 @@ class CASBEN_Loader {
 		 * Invoices Module
 		 */
 		require_once CASBEN_PLUGIN_DIR . 'modules/invoices/class-invoices.php';
-
+		/*
+		* Dashboard Module
+		*/
+		
+		require_once CASBEN_PLUGIN_DIR . 'modules/dashboard/class-dashboard-admin.php';
+		require_once CASBEN_PLUGIN_DIR . 'modules/dashboard/class-dashboard-data.php';
+		require_once CASBEN_PLUGIN_DIR . 'includes/ui/class-ui-card.php';
+		require_once CASBEN_PLUGIN_DIR . 'includes/ui/class-ui-actions.php';
+		require_once CASBEN_PLUGIN_DIR . 'includes/ui/class-ui.php';
+		require_once CASBEN_PLUGIN_DIR . 'includes/class-activity-log.php';
+		require_once CASBEN_PLUGIN_DIR . 'includes/ui/components/class-btn.php';
+		require_once CASBEN_PLUGIN_DIR . 'includes/ui/components/class-page-toolbar.php';
+		require_once CASBEN_PLUGIN_DIR . 'includes/ui/components/class-stat-card.php';
 
 		/*
 		 * Initialize Admin
@@ -83,6 +94,8 @@ class CASBEN_Loader {
 
 			// Initialize Invoices Module
 			new CASBEN_Invoices();
+			// Initialize Dashboard Module
+			new CASBEN_Dashboard_Admin();
 
 		}
 

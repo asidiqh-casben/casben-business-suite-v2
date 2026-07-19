@@ -188,13 +188,34 @@ class CASBEN_Invoice_List extends WP_List_Table {
 			'delete_invoice_' . absint( $item['id'] )
 		);
 
+		$view_url = add_query_arg(
+			array(
+				'page'   => 'casben-invoices',
+				'action' => 'view',
+				'id'     => absint( $item['id'] ),
+			),
+			admin_url( 'admin.php' )
+		);
+
+
 		$actions = array(
+			'view' => sprintf(
+				'<a href="%s">%s</a>',
+				esc_url( $view_url ),
+				esc_html__( 'View', 'casben-business-suite' )
+			),
+
 			'edit' => sprintf(
 				'<a href="%s">%s</a>',
 				esc_url( $edit_url ),
 				esc_html__( 'Edit', 'casben-business-suite' )
 			),
-			'delete' => '<a href="' . $delete_url . '">Delete</a>',
+
+			'delete' => sprintf(
+				'<a href="%s">%s</a>',
+				esc_url( $delete_url ),
+				esc_html__( 'Delete', 'casben-business-suite' )
+			),
 		);
 
 		return sprintf(

@@ -30,6 +30,10 @@ class CASBEN_Invoice_Admin {
 	 */
 		public function __construct() {
 
+			error_log(
+    		'Invoice Admin constructor fired'
+			);
+
     		add_action(
         		'admin_init',
         	array(
@@ -37,6 +41,15 @@ class CASBEN_Invoice_Admin {
             	'handle_actions',
         	)
     	);
+				error_log(
+			'Hook priority = ' .
+			has_action(
+				'admin_init',
+				array( $this, 'handle_actions' )
+			)
+		);
+
+
 
 	}
 
@@ -77,6 +90,7 @@ class CASBEN_Invoice_Admin {
 	 * @return void
 	 */
 	public function invoices_page() {
+		error_log( '>>> invoices_page() called' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die(
@@ -95,34 +109,28 @@ class CASBEN_Invoice_Admin {
 			: 'list';
 
 
-				switch ( $action ) {
+	switch ( $action ) {
 
-			case 'add':
+	case 'view':
 
-				$this->render_form();
+		$this->render_view();
 
-				break;
-
-
-			case 'edit':
-
-				$this->render_form();
-
-				break;
+		break;
 
 
-			case 'delete':
+	case 'edit':
 
-				$this->delete_invoice_action();
+		$this->render_form();
 
-				break;
+		break;
 
 
-			default:
+	default:
 
-				$this->render_list();
+		$this->render_list();
 
-				break;
+		break;
+
 
 		}
 
@@ -257,7 +265,9 @@ class CASBEN_Invoice_Admin {
 	 * @return void
 	 */
 	public function handle_actions() {
-
+				error_log( '==========================' );
+error_log( 'handle_actions START' );
+error_log( print_r( $_GET, true ) );
 
 		if ( ! is_admin() ) {
 			return;
@@ -293,37 +303,39 @@ class CASBEN_Invoice_Admin {
 			return;
 		}
 
-
+				error_log( '2 - handle_actions entered' );
 		$invoice_id = absint(
 			wp_unslash( $_GET['id'] )
 		);
-
-$nonce = isset( $_GET['_wpnonce'] )
-    ? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) )
-    : '';
 
 		if ( ! $invoice_id ) {
 			return;
 		}
 
-if ( ! isset( $_GET['_wpnonce'] ) ) {
-    
-    return;
-}
+		if ( ! isset( $_GET['_wpnonce'] ) ) {
+			
+			return;
+		}
 
-$nonce = sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) );
+		$nonce = sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) );
+				error_log( '3 - action is delete' );
+				error_log( 'About to verify nonce' );
+			error_log( 'Invoice ID = ' . $invoice_id );
+			error_log( 'Nonce = ' . $nonce );
 
-$result = wp_verify_nonce(
-    $nonce,
-    'delete_invoice_' . $invoice_id
-);
-
-if ( false === $result ) {
-    wp_die( 'Nonce verification failed.' );
-}
-		$this->delete_invoice(
-			$invoice_id
+		$result = wp_verify_nonce(
+			$nonce,
+			'delete_invoice_' . $invoice_id
 		);
+		error_log( 'Nonce result = ' . var_export( $result, true ) );
+
+		if ( false === $result ) {
+			wp_die( 'Nonce verification failed.' );
+		}
+				error_log( '4 - about to verify nonce' );
+				$this->delete_invoice(
+					$invoice_id
+				);
 
 
 		wp_safe_redirect(
@@ -347,6 +359,11 @@ if ( false === $result ) {
 	 * @param int $invoice_id Invoice ID.
 	 * @return void
 	 */
+				/**
+ * Handle single invoice deletion.
+ *
+ * @return void
+ */
 	private function delete_invoice( $invoice_id ) {
 
 		global $wpdb;
@@ -365,15 +382,6 @@ if ( false === $result ) {
 		$items_table = $wpdb->prefix . 'casben_invoice_items';
 
 
-		$wpdb->delete(
-			$items_table,
-			array(
-				'invoice_id' => $invoice_id,
-			),
-			array(
-				'%d',
-			)
-		);
 $items_deleted = $wpdb->delete(
     $items_table,
     array(
@@ -461,6 +469,58 @@ $items_deleted = $wpdb->delete(
 		);
 
 	}
+/**
+ * Render invoice view page.
+ *
+ * @return void
+ */
+private function render_view() {
+
+	$invoice_id = isset( $_GET['id'] )
+		? absint( wp_unslash( $_GET['id'] ) )
+		: 0;
 
 
+	if ( ! $invoice_id ) {
+
+		wp_die(
+			esc_html__(
+				'Invalid invoice.',
+				'casben-business-suite'
+			)
+		);
+
+	}
+
+
+	$invoice = new CASBEN_Invoice();
+
+
+	$invoice_data = $invoice->get(
+		$invoice_id
+	);
+
+
+	if ( ! $invoice_data ) {
+
+		wp_die(
+			esc_html__(
+				'Invoice not found.',
+				'casben-business-suite'
+			)
+		);
+
+	}
+
+
+	$items = $invoice->get_items(
+		$invoice_id
+	);
+
+
+	include CASBEN_PLUGIN_DIR . 'modules/invoices/views/invoice-view.php';
+
+	}
 }
+
+

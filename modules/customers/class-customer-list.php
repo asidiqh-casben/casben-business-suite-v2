@@ -4,7 +4,6 @@
  *
  * @package CASBEN_Business_Suite
  */
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
